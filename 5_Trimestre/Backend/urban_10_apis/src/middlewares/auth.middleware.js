@@ -1,0 +1,71 @@
+const jwt = require("jsonwebtoken");
+
+const validarToken = (req, res, next) => {
+  let token = req.headers["x-access-token"];
+  
+  if (!token) {
+    const authHeader = req.headers.authorization || req.headers.Authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.slice(7);
+    }
+  }
+
+  if (!token) {
+    return res.status(403).json({ msg: "No se envió token" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = decoded.id;
+    req.rolId = decoded.rol;
+    next();
+  } catch (err) {
+    return res.status(401).json({ msg: "Token inválido o expirado" });
+  }
+};
+
+// ✅ Solo SuperAdmin (usuario 72 O rol 1)
+const soloSuperAdmin = (req, res, next) => {
+  if (req.userId === 72 || req.rolId === 1) {
+    return next();
+  }
+  return res.status(403).json({ msg: "Acceso denegado. Solo superadmin." });
+};
+
+// ✅ Admin limitado (rol 1 o rol 3)
+const soloAdmin = (req, res, next) => {
+  if (req.rolId === 1 || req.rolId === 3) {
+    return next();
+  }
+  return res.status(403).json({ msg: "Acceso denegado. Solo administradores." });
+};
+
+// ✅ Usuario autenticado (cualquier rol válido: 1 o 2)
+const usuarioAutenticado = (req, res, next) => {
+  next();
+};
+
+// ✅ Propietario del recurso O SuperAdmin
+const propietarioOSuperAdmin = (req, res, next) => {
+  const { id, id_usuario } = req.params;
+  const userId = req.userId;
+  const rolId = req.rolId;
+
+  const targetId = parseInt(id || id_usuario);
+
+  if (userId === 72 || rolId === 1 || targetId === userId) {
+    return next();
+  }
+
+  return res.status(403).json({ 
+    msg: "Acceso denegado. Solo puedes acceder a tus propios datos." 
+  });
+};
+
+module.exports = { 
+  validarToken, 
+  soloSuperAdmin, 
+  soloAdmin,          // ← NUEVO
+  usuarioAutenticado, 
+  propietarioOSuperAdmin 
+};

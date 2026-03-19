@@ -1,0 +1,22 @@
+-- =============================================
+-- DROP DATABASE: URBAN COPS
+-- =============================================
+
+USE urban1;
+
+-- Eliminar tablas en orden (primero las que tienen FK)
+DROP TABLE IF EXISTS registro;
+DROP TABLE IF EXISTS pqrs;
+DROP TABLE IF EXISTS inventario;
+DROP TABLE IF EXISTS personalizacion;
+DROP TABLE IF EXISTS ventas;
+DROP TABLE IF EXISTS envio;
+DROP TABLE IF EXISTS pago;
+DROP TABLE IF EXISTS detalle_pedido;
+DROP TABLE IF EXISTS pedido;
+DROP TABLE IF EXISTS productos;
+DROP TABLE IF EXISTS usuarios;
+DROP TABLE IF EXISTS rol;
+
+-- Eliminar base de datos
+DROP DATABASE IF EXISTS urban1;

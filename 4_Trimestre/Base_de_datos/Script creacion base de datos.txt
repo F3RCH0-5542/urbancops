@@ -1,0 +1,193 @@
+-- =============================================
+-- BASE DE DATOS: URBAN COPS
+-- =============================================
+
+CREATE DATABASE IF NOT EXISTS urban1;
+USE urban1;
+
+-- =============================================
+-- TABLA: rol
+-- =============================================
+CREATE TABLE rol (
+    id_rol INT(11) NOT NULL AUTO_INCREMENT,
+    id_usuario INT(11),
+    nombre_rol VARCHAR(45),
+    descripcion VARCHAR(100),
+    PRIMARY KEY (id_rol)
+);
+
+-- =============================================
+-- TABLA: usuarios
+-- =============================================
+CREATE TABLE usuarios (
+    id_usuario INT(11) NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(45),
+    apellido VARCHAR(45),
+    documento VARCHAR(45),
+    correo VARCHAR(45),
+    clave VARCHAR(200),
+    usuario VARCHAR(45),
+    id_rol INT(11),
+    PRIMARY KEY (id_usuario),
+    FOREIGN KEY (id_rol) REFERENCES rol(id_rol)
+);
+
+-- =============================================
+-- TABLA: productos
+-- =============================================
+CREATE TABLE productos (
+    id_producto INT(11) NOT NULL AUTO_INCREMENT,
+    nombre_producto VARCHAR(100),
+    descripcion TEXT,
+    precio_base DECIMAL(10,2),
+    categoria VARCHAR(50),
+    stock_disponible INT(11),
+    activo TINYINT(1) DEFAULT 1,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    imagen VARCHAR(255),
+    PRIMARY KEY (id_producto)
+);
+
+-- =============================================
+-- TABLA: pedido
+-- =============================================
+CREATE TABLE pedido (
+    id_pedido INT(11) NOT NULL AUTO_INCREMENT,
+    fecha_pedido DATE,
+    total DECIMAL(10,2),
+    estado VARCHAR(50),
+    metodo_pago VARCHAR(50),
+    id_usuario INT(11),
+    PRIMARY KEY (id_pedido),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+-- =============================================
+-- TABLA: detalle_pedido
+-- =============================================
+CREATE TABLE detalle_pedido (
+    id_detalle INT(11) NOT NULL AUTO_INCREMENT,
+    id_producto INT(11),
+    nombre_producto VARCHAR(100),
+    imagen VARCHAR(255),
+    id_pedido INT(11),
+    id_personalizacion INT(11),
+    cantidad INT(11),
+    precio_unitario DECIMAL(10,2),
+    subtotal DECIMAL(10,2),
+    PRIMARY KEY (id_detalle),
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
+    FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido)
+);
+
+-- =============================================
+-- TABLA: pago
+-- =============================================
+CREATE TABLE pago (
+    id_pago INT(11) NOT NULL AUTO_INCREMENT,
+    id_pedido INT(11),
+    metodo_pago VARCHAR(255),
+    monto VARCHAR(100),
+    estado_pago VARCHAR(20),
+    referencia VARCHAR(100),
+    fecha_pago DATE,
+    PRIMARY KEY (id_pago),
+    FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido)
+);
+
+-- =============================================
+-- TABLA: envio
+-- =============================================
+CREATE TABLE envio (
+    id_envio INT(11) NOT NULL AUTO_INCREMENT,
+    id_pedido INT(11),
+    direccion VARCHAR(255),
+    ciudad VARCHAR(100),
+    telefono VARCHAR(20),
+    estado_envio VARCHAR(50),
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_envio),
+    FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido)
+);
+
+-- =============================================
+-- TABLA: ventas
+-- =============================================
+CREATE TABLE ventas (
+    id_venta INT(11) NOT NULL AUTO_INCREMENT,
+    id_usuario INT(11),
+    id_pedido INT(11),
+    total DECIMAL(10,2),
+    estado VARCHAR(20),
+    fecha DATE,
+    PRIMARY KEY (id_venta),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido)
+);
+
+-- =============================================
+-- TABLA: personalizacion
+-- =============================================
+CREATE TABLE personalizacion (
+    id_personalizacion INT(11) NOT NULL AUTO_INCREMENT,
+    id_pedido INT(11),
+    id_producto INT(11),
+    descripcion_personalizacion VARCHAR(100),
+    tipo_personalizacion VARCHAR(50),
+    imagen_referencia VARCHAR(500),
+    color_deseado VARCHAR(60),
+    talla VARCHAR(10),
+    estado VARCHAR(20),
+    precio_adicional DECIMAL(10,2),
+    PRIMARY KEY (id_personalizacion),
+    FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido),
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+);
+
+-- =============================================
+-- TABLA: inventario
+-- =============================================
+CREATE TABLE inventario (
+    id_inventario INT(11) NOT NULL AUTO_INCREMENT,
+    id_producto INT(11),
+    tipo ENUM('entrada','salida','ajuste'),
+    cantidad INT(11),
+    stock_resultante INT(11),
+    stock_minimo INT(11),
+    motivo VARCHAR(255),
+    id_referencia INT(11),
+    fecha_movimiento DATETIME,
+    PRIMARY KEY (id_inventario),
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+);
+
+-- =============================================
+-- TABLA: pqrs
+-- =============================================
+CREATE TABLE pqrs (
+    id_pqrs INT(11) NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(100),
+    correo VARCHAR(100),
+    tipo_pqrs ENUM('Peticion','Queja','Reclamo','Sugerencia'),
+    descripcion TEXT,
+    estado ENUM('Pendiente','En Proceso','Resuelto','Cerrado'),
+    respuesta TEXT,
+    fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_respuesta TIMESTAMP,
+    id_usuario INT(11),
+    PRIMARY KEY (id_pqrs),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+-- =============================================
+-- TABLA: registro
+-- =============================================
+CREATE TABLE registro (
+    id_registro INT(11) NOT NULL AUTO_INCREMENT,
+    id_usuario INT(11),
+    nombre VARCHAR(255),
+    contraseña VARCHAR(100),
+    rol VARCHAR(100),
+    PRIMARY KEY (id_registro),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
