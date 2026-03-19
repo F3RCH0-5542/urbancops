@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UrbanCops - Carrito</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../principal/style.css"> 
+</head>
+<body>  
+
+ 
+ <nav class="navbar navbar-expand-lg shadow-sm sticky-top bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="../principal/index.html"><img src="../img/logo12.png" alt="UrbanCops" width="40"></a>
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGorras">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarGorras">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">NBA</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/CateChi.html">Chicago Bulls</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateBo.html">Boston Celtics</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateAn.html">Los Angeles Lakers</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">NFL</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/cateatl.html">Atlanta Falcons</a></li>
+            <li><a class="dropdown-item" href="../categorias/cateAri.html">Arizona Cardinals</a></li>
+            <li><a class="dropdown-item" href="../categorias/catevegas.html">Las Vegas Raiders</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">MBL</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/CateRed.html">Boston Red Sox</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateBo.html">Chicago White Sox</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateAn.html">Atlanta Braves</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link fw-bold" href="../personalizacion/personalizadas.html">Personalizadas</a></li>
+        <li class="nav-item"><a class="nav-link fw-bold" href="../pqrs/PQRS.html">PQRS</a></li>
+      </ul>
+      <form class="d-flex me-3" onsubmit="buscarGorra(event)">
+        <input id="barra-busqueda" class="form-control" type="search" placeholder="Buscar gorras..." aria-label="Buscar">
+      </form>
+      <a href="../login/login.php" class="btn text-white"><i class="bi bi-person"></i></a>
+      <button class="btn text-white position-relative" onclick="window.location.href='carrito.html'">
+        <i class="bi bi-cart"></i>
+        <span id="contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+  <!-- Contenido del carrito -->
+  <section class="container my-5">
+    <h2 class="text-center mb-4">Tus productos seleccionados</h2>
+    <div id="carrito-contenido" class="row gy-4"></div>
+
+    <div class="text-center mt-4">
+      <h4 id="total-pagar" class="mb-3"></h4>
+      <button class="btn btn-success me-2" onclick="finalizarCompra()">Finalizar compra</button>
+      <button class="btn btn-danger" onclick="vaciarCarrito()">Vaciar carrito</button>
+    </div>
+  </section>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Script del carrito  -->
+  <script>
+    function cargarCarrito() {
+      const carrito = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
+      const contenedor = document.getElementById("carrito-contenido");
+      const totalTexto = document.getElementById("total-pagar");
+      contenedor.innerHTML = "";
+
+      if (carrito.length === 0) {
+        contenedor.innerHTML = '<p class="text-center">Tu carrito está vacío.</p>';
+        totalTexto.textContent = "";
+        return;
+      }
+
+      let total = 0;
+      carrito.forEach((item, index) => {
+        if (!item.cantidad) item.cantidad = 1;
+        const subtotal = item.precio * item.cantidad;
+        total += subtotal;
+
+        const productoHTML = `
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card producto-card text-white bg-dark border-light h-100">
+              <img src="${item.imagen || 'img/default_gorra.png'}" 
+     class="card-img-top img-fluid" 
+     alt="${item.nombre}" 
+     style="max-height: 200px; object-fit: contain;">
+
+              <div class="card-body d-flex flex-column justify-content-between">
+                <h5 class="card-title">${item.nombre}</h5>
+                <p class="card-text fw-bold">Precio unidad: $${item.precio.toLocaleString()} COP</p>
+                <div class="d-flex justify-content-center align-items-center mb-2">
+                  <button class="btn btn-outline-light btn-sm me-2" onclick="cambiarCantidad(${index}, -1)">-</button>
+                  <span class="fw-bold">${item.cantidad}</span>
+                  <button class="btn btn-outline-light btn-sm ms-2" onclick="cambiarCantidad(${index}, 1)">+</button>
+                </div>
+                <p class="card-text">Subtotal: $${subtotal.toLocaleString()} COP</p>
+                <button class="btn btn-outline-danger btn-sm mt-2" onclick="eliminarProducto(${index})">
+                  <i class="bi bi-trash"></i> Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        contenedor.innerHTML += productoHTML;
+      });
+
+      totalTexto.textContent = `Total a pagar: $${total.toLocaleString()} COP`;
+
+    }
+
+    function cambiarCantidad(index, cambio) {
+      const carrito = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
+      carrito[index].cantidad = Math.max(1, (carrito[index].cantidad || 1) + cambio);
+      localStorage.setItem("carritoUrbanCops", JSON.stringify(carrito));
+      cargarCarrito();
+    }
+
+    function eliminarProducto(index) {
+      const carrito = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
+      carrito.splice(index, 1);
+      localStorage.setItem("carritoUrbanCops", JSON.stringify(carrito));
+      cargarCarrito();
+    }
+
+    function vaciarCarrito() {
+      localStorage.removeItem("carritoUrbanCops");
+      cargarCarrito();
+    }
+
+    function finalizarCompra() {
+      alert("¡Gracias por tu compra! Tu pedido ha sido procesado.");
+      localStorage.removeItem("carritoUrbanCops");
+      cargarCarrito();
+    }
+
+    document.addEventListener("DOMContentLoaded", cargarCarrito);
+  </script>
+</body>
+</html>

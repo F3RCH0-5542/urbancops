@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tu Voz en UrbanCops</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="../pqrs/PQRS.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg shadow-sm sticky-top bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="../principal/index.html"><img src="../img/logo12.png" alt="UrbanCops" width="40"></a>
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGorras">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarGorras">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">NBA</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/CateChi.html">Chicago Bulls</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateBo.html">Boston Celtics</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateAn.html">Los Angeles Lakers</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">NFL</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/cateatl.html">Atlanta Falcons</a></li>
+            <li><a class="dropdown-item" href="../categorias/cateAri.html">Arizona Cardinals</a></li>
+            <li><a class="dropdown-item" href="../categorias/catevegas.html">Las Vegas Raiders</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">MBL</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/CateRed.html">Boston Red Sox</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateBo.html">Chicago White Sox</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateAn.html">Atlanta Braves</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link fw-bold" href="../personalizacion/personalizadas.html">Personalizadas</a></li>
+        <li class="nav-item"><a class="nav-link fw-bold" href="../categorias/pqrs.html">PQRS</a></li>
+      </ul>
+      <form class="d-flex me-3" onsubmit="buscarGorra(event)">
+        <input id="barra-busqueda" class="form-control" type="search" placeholder="Buscar gorras..." aria-label="Buscar">
+      </form>
+      <a href="../login/login.php" class="btn text-white"><i class="bi bi-person"></i></a>
+      <button class="btn text-white position-relative" onclick="window.location.href='carrito.html'">
+        <i class="bi bi-cart"></i>
+        <span id="contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ENCABEZADO -->
+<div class="container text-center my-5">
+  <h1 class="text-white fw-bold ">Tu Voz en UrbanCops</h1>
+  <p class="lead">¿Tuviste algún inconveniente, sugerencia o reclamo? Envíanos tu mensaje, te escuchamos.</p>
+</div>
+
+<!-- FORMULARIO -->
+<div class="container">
+  <div class="card bg-dark text-light shadow-lg mb-5">
+    <div class="card-header bg-dark text-white">
+      <h5><i class="bi bi-pencil-square me-2"></i>Formulario de contacto</h5>
+    </div>
+    <div class="card-body">
+      <form id="formPQRS" autocomplete="off">
+        <div class="mb-3">
+          <label for="inputNombre" class="form-label"><i class="bi bi-person-fill me-2"></i>Nombre completo</label>
+          <input type="text" class="form-control" id="inputNombre" name="nombre_uc" placeholder="Escribe tu nombre" autocomplete="off" required>
+        </div>
+        <div class="mb-3">
+          <label for="inputCorreo" class="form-label"><i class="bi bi-envelope-fill me-2"></i>Correo electrónico</label>
+         
+          <input type="email" class="form-control" id="inputCorreo" name="correo_uc" placeholder="" autocomplete="new-email" required>
+        </div>
+        <div class="mb-3">
+          <label for="tipo" class="form-label"><i class="bi bi-ui-checks me-2"></i>Tipo de solicitud</label>
+          <select class="form-select" id="tipo" name="tipo_uc" required>
+            <option value="">Selecciona una opción</option>
+            <option value="peticion">Petición</option>
+            <option value="queja">Queja</option>
+            <option value="reclamo">Reclamo</option>
+            <option value="sugerencia">Sugerencia</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="mensaje" class="form-label"><i class="bi bi-chat-dots-fill me-2"></i>Mensaje</label>
+          <textarea class="form-control" id="mensaje" name="mensaje_uc" rows="4" placeholder="Danos tu Observacion" required></textarea>
+        </div>
+       <button type="submit" class="btn btn-light text-dark border border-dark w-100">
+  <i class="bi bi-send-fill me-1"></i>Enviar
+</button>
+
+      </form>
+
+      <div id="estado-envio" class="alert alert-info mt-3 d-none" role="alert">
+        <i class="bi bi-clock-history"></i> Procesando tu solicitud...
+      </div>
+
+      <div id="respuestaPQRS" class="alert alert-success mt-3 d-none" role="alert"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-black text-white text-center py-3">
+  <div class="container">&copy; 2025 UrbanCops. Todos los derechos reservados.</div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JS -->
+<script>
+document.getElementById("formPQRS").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const nombre = document.getElementById("inputNombre").value;
+  const correo = document.getElementById("inputCorreo").value;
+  const tipo = document.getElementById("tipo").value;
+  const mensaje = document.getElementById("mensaje").value;
+
+  document.getElementById("estado-envio").classList.remove("d-none");
+
+  setTimeout(() => {
+    const solicitud = {
+      nombre,
+      correo,
+      tipo,
+      mensaje,
+      fecha: new Date().toLocaleString()
+    };
+
+    const historial = JSON.parse(localStorage.getItem("pqrsUrbanCops")) || [];
+    historial.push(solicitud);
+    localStorage.setItem("pqrsUrbanCops", JSON.stringify(historial));
+
+    const seguimiento = Math.floor(100000 + Math.random() * 900000);
+    const mensajeTipo = {
+      peticion: "Gracias por tu petición. Será evaluada por nuestro equipo.",
+      queja: "Lamentamos el inconveniente. Lo atenderemos con prioridad.",
+      reclamo: "Gracias por informarnos. Revisaremos lo ocurrido.",
+      sugerencia: "¡Nos encanta recibir sugerencias! Las tendremos en cuenta."
+    };
+
+    const respuesta = document.getElementById("respuestaPQRS");
+    respuesta.innerHTML = `
+      <i class="bi bi-check-circle-fill"></i> ${mensajeTipo[tipo]}<br>
+      Número de seguimiento: <strong>#${seguimiento}</strong>
+    `;
+
+    document.getElementById("formPQRS").reset();
+    document.getElementById("estado-envio").classList.add("d-none");
+    respuesta.classList.remove("d-none");
+
+    setTimeout(() => respuesta.classList.add("d-none"), 8000);
+  }, 1000);
+});
+</script>
+</body>
+</html>
