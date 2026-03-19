@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UrbanCops - Personalizadas</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="personalizadas.css">
+</head>
+<body class="bg-dark text-light">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg shadow-sm sticky-top bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="../principal/index.html"><img src="../img/logo12.png" alt="UrbanCops" width="40"></a>
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGorras">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarGorras">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">NBA</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/CateChi.html">Chicago Bulls</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateBo.html">Boston Celtics</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateAn.html">Los Angeles Lakers</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">NFL</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/cateatl.html">Atlanta Falcons</a></li>
+            <li><a class="dropdown-item" href="../categorias/cateAri.html">Arizona Cardinals</a></li>
+            <li><a class="dropdown-item" href="../categorias/catevegas.html">Las Vegas Raiders</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">MBL</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/CateRed.html">Boston Red Sox</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateBo.html">Chicago White Sox</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateAn.html">Atlanta Braves</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link fw-bold" href="personalizadas.html">Personalizadas</a></li>
+        <li class="nav-item"><a class="nav-link fw-bold" href="../pqrs/PQRS.html">PQRS</a></li>
+        <li><a class="dropdown-item"></li>
+      </ul>
+      <form class="d-flex me-3" onsubmit="buscarGorra(event)">
+        <input id="barra-busqueda" class="form-control" type="search" placeholder="Buscar gorras..." aria-label="Buscar">
+      </form>
+      <a href="../login/login.php" class="btn text-white"><i class="bi bi-person"></i></a>
+      <button class="btn text-white position-relative" onclick="window.location.href='carrito.html'">
+        <i class="bi bi-cart"></i>
+        <span id="contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Formulario de personalización -->
+  <section class="container my-5">
+  <h2 class="text-center mb-4 text-white">Personaliza tu Gorra</h2>
+  <form class="formulario-personalizado bg-white text-dark p-4 rounded shadow-lg">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Tipo de Gorra:</label>
+        <input type="text" class="form-control bg-white text-dark border-secondary" placeholder="Ej. Snapback, Trucker...">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Diseño:</label>
+        <input type="text" class="form-control bg-white text-dark border-secondary" placeholder="Nombre o logotipo">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Color:</label>
+        <input type="color" class="form-control form-control-color" style="width: 100%;">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Talla:</label>
+        <select class="form-select bg-white text-dark border-secondary">
+          <option>S</option>
+          <option>M</option>
+          <option>L</option>
+          <option>XL</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Cliente:</label>
+        <input type="text" class="form-control bg-white text-dark border-secondary" placeholder="Tu nombre o usuario">
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-outline-primary px-5">Guardar Personalización</button>
+    </div>
+  </form>
+</section>
+
+
+  <!-- Footer -->
+  <footer class="bg-black text-light pt-5 pb-4 mt-5">
+    <div class="container">
+      <div class="row gy-4 text-center text-md-start">
+        <div class="col-md-4">
+          <h5 class="fw-bold text-white">Contacto</h5>
+          <p><i class="bi bi-envelope me-2"></i> contacto@urbancops.com</p>
+          <p><i class="bi bi-telephone me-2"></i> +57 318 71661793</p>
+          <p><i class="bi bi-geo-alt me-2"></i> Bogotá, Colombia</p>
+        </div>
+        <div class="col-md-4">
+          <h5 class="fw-bold text-white">Navegación</h5>
+          <ul class="list-unstyled">
+            <li><a href="../principal/index.html" class="text-light text-decoration-none">Inicio</a></li>
+            <li><a href="../carrito/carrito.html" class="text-light text-decoration-none">Carrito</a></li>
+            <li><a href="personalizadas.html" class="text-light text-decoration-none">Personalizadas</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5 class="fw-bold text-white">Síguenos</h5>
+          <a href="#" class="text-light fs-4 me-3"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-light fs-4 me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-light fs-4"><i class="bi bi-tiktok"></i></a>
+        </div>
+      </div>
+      <hr class="border-top border-secondary mt-4">
+      <div class="text-center small text-secondary">
+        &copy; 2025 UrbanCops. Todos los derechos reservados.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function actualizarContadorCarrito() {
+      const carrito = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
+      const contador = document.getElementById("contador-carrito");
+      if (contador) contador.textContent = carrito.length;
+    }
+    document.addEventListener("DOMContentLoaded", actualizarContadorCarrito);
+  </script>
+</body>
+</html>

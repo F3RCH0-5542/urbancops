@@ -1,0 +1,84 @@
+
+body {
+  background-color: #000000;
+  color: #f9f8f8;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+.navbar, .dropdown-menu {
+  background-color: #000000;
+}
+.navbar .nav-link,
+.navbar .navbar-brand,
+.navbar .dropdown-item {
+  color: #fff !important;
+}
+.navbar .dropdown-item:hover {
+  background-color: #222;
+}
+
+
+.form-control,
+.form-select {
+  background-color: #1a1a1a;
+  color: #fff;
+  border: 1px solid #444;
+}
+.form-control::placeholder {
+  color: #bbb;
+}
+
+
+.btn-primary {
+  background-color: #fff;
+  color: #000;
+  border: none;
+}
+.btn-primary:hover {
+  background-color: #ccc;
+  color: #000;
+}
+
+
+.carousel img {
+  height: 500px;
+  object-fit: cover;
+}
+
+
+.text-dark-bg {
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #333;
+  transition: all 0.3s ease;
+}
+.text-dark-bg:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+
+
+footer {
+  background-color: #111;
+  color: #fff;
+}
+
+
+#contador-carrito {
+  font-size: 0.7rem;
+  padding: 4px 6px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  transform: translate(50%, -50%);
+  z-index: 1;
+}
+.navbar.sticky-top {
+  z-index: 1030;
+  background-color: #000; /* o usa rgba(0,0,0,0.9) si quieres un leve efecto transparente */
+}
+

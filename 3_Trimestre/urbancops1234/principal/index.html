@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UrbanCops - Sistema de Gestión</title>
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../principal/style.css"> 
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg shadow-sm sticky-top bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><img src="../img/logo12.png" alt="UrbanCops" width="40"></a>
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGorras">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarGorras">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">NBA</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/CateChi.html">Chicago Bulls</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateBo.html">Boston Celtics</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateAn.html">Los Angeles Lakers</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">NFL</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/cateatl.html">Atlanta Falcons</a></li>
+            <li><a class="dropdown-item" href="../categorias/cateAri.html">Arizona Cardinals</a></li>
+            <li><a class="dropdown-item" href="../categorias/catevegas.html">Las Vegas Raiders</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">MBL</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../categorias/CateRed.html">Boston Red Sox</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateBo.html">Chicago White Sox</a></li>
+            <li><a class="dropdown-item" href="../categorias/CateWhi.html">Atlanta Braves</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link fw-bold" href="../personalizacion/personalizadas.html">Personalizadas</a></li>
+        <li class="nav-item"><a class="nav-link fw-bold" href="../pqrs/PQRS.html">PQRS</a></li>
+      </ul>
+      <form class="d-flex me-3" onsubmit="buscarGorra(event)">
+        <input id="barra-busqueda" class="form-control" type="search" placeholder="Buscar gorras..." aria-label="Buscar">
+      </form>
+      <a href="../login/login.php" class="btn text-white"><i class="bi bi-person"></i></a>
+      <button class="btn text-white position-relative" onclick="window.location.href='../carrito/carrito.html'">
+        <i class="bi bi-cart"></i>
+        <span id="contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+
+
+  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="../img/Containera.webp" class="d-block w-100" alt="Slide 1">
+      </div>
+      <div class="carousel-item">
+        <img src="../img/containerb.webp" class="d-block w-100" alt="Slide 2">
+      </div>
+      <div class="carousel-item">
+        <img src="../img/Contanerc.webp" class="d-block w-100" alt="Slide 3">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+
+  <!---- NBA --->
+  <section class="container my-5 text-center">
+    <h2>NBA</h2>
+    <p>Explora nuestra colección de gorras oficiales de la NBA.</p>
+    <div class="row justify-content-center mt-4">
+      
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Chicago Bulls</h3>
+          <img src="../img/chicago.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Gorra New Era 59FIFTY de la colección NBA Classic.</p>
+          <p class="fw-bold">$95.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Chicago Bulls', 95000, '../img/chicago.png')">Agregar al carrito</button>
+        </div>
+      </div>
+   
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Boston Celtics</h3>
+          <img src="../img/Adobe Express - file.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Gorra con logotipo bordado y diseño premium.</p>
+          <p class="fw-bold">$92.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Boston Celtics', 92000, '../img/Adobe Express - file.png')">Agregar al carrito</button>
+        </div>
+      </div>
+  
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Los Angeles Lakers</h3>
+          <img src="../img/Lakers12.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Modelo clásico con detalles bordados oficiales.</p>
+          <p class="fw-bold">$98.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Los Angeles Lakers', 98000, '../img/Lakers12.png')">Agregar al carrito</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!----NFL---->
+  <section class="container my-5 text-center">
+    <h2>NFL</h2>
+    <p>Explora nuestra colección de gorras oficiales de la NFL.</p>
+    <div class="row justify-content-center mt-4">
+     
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Atlanta Falcons</h3>
+          <img src="../img/Atlanta12.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Gorra New Era 59FIFTY de la colección NBA Classic.</p>
+          <p class="fw-bold">$95.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Chicago Bulls', 95000, '../img/Atlanta12.png')">Agregar al carrito</button>
+        </div>
+      </div>
+     
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Arizona Cardinals</h3>
+          <img src="../img/Arizona12.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Gorra con logotipo bordado y diseño premium.</p>
+          <p class="fw-bold">$92.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Boston Celtics', 92000, '../img/Arizona12.png')">Agregar al carrito</button>
+        </div>
+      </div>
+  
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Los Angeles Lakers</h3>
+          <img src="../img/Raiders12.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Modelo clásico con detalles bordados oficiales.</p>
+          <p class="fw-bold">$98.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Los Angeles Lakers', 98000, '../img/Raiders12.png')">Agregar al carrito</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <style>
+    .img-grid a img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      border-radius: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .img-grid a:hover img {
+      transform: scale(1.03);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container my-4">
+    <h2 class="text-center mb-4">Colecciones Destacadas</h2>
+    <div class="row row-cols-1 row-cols-md-2 g-3 img-grid">
+
+      
+      <div class="col">
+        <a href="../inventario/Inventario.html">
+          <img src="../img/sti.webp" alt="Imagen 1" class="img-fluid my-2">
+        </a>
+      </div>
+
+      
+      <div class="col">
+        <a href="../inventario/Inventario.html">
+          <img src="../img/NIgga.webp" alt="Imagen 2" class="img-fluid my-2">
+        </a>
+      </div>
+
+     
+      <div class="col">
+        <a href="../inventario/Inventario.html">
+          <img src="../img/blanco.webp" alt="Imagen 3" class="img-fluid my-2">
+        </a>
+      </div>
+
+      
+      <div class="col">
+        <a href="../inventario/Inventario.html">
+          <img src="../img/rap.webp" alt="Imagen 4" class="img-fluid my-2">
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+
+
+<!---carrusel 2--->
+<section class="container my-5 text-center">
+  <div id="carouselFooter" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="../img/An-Assortment-of-Baseball-Hats-Displayed-on-Shelves_2468753_wh860.png" class="d-block w-100" alt="Slide 1">
+      </div>
+      <div class="carousel-item">
+        <img src="../img/image_79235f70-f04a-433c-bd7e-4978de0eec57.jpg" class="d-block w-100" alt="Slide 2">
+      </div>
+      <div class="carousel-item">
+        <img src="../img/desktop-wallpaper-colourful-caps-caps.jpg" class="d-block w-100" alt="Slide 3">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselFooter" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselFooter" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+</section>
+
+
+  <footer class="bg-black text-white pt-5 pb-3 mt-5">
+  <div class="container"> 
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold">UrbanCops</h5>
+        <p>Gorras urbanas exclusivas con estilo auténtico. Representa tu equipo, tu barrio y tu esencia.</p>
+        <div>
+          <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold">Enlaces Rápidos</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Inicio</a></li>
+          <li><a href="#" class="text-white text-decoration-none">NBA</a></li>
+          <li><a href="#" class="text-white text-decoration-none">MLB</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Personalizadas</a></li>
+        </ul>
+      </div>
+
+   
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold">Contacto</h5>
+        <p><i class="bi bi-envelope"></i> contacto@urbancops.com</p>
+        <p><i class="bi bi-phone"></i> +57 310 000 0000</p>
+        <p><i class="bi bi-geo-alt"></i> Bogotá, Colombia</p>
+      </div>
+
+    </div>
+
+    <hr class="border-gray" />
+
+    <div class="text-center small">
+      &copy; 2025 UrbanCops. Todos los derechos reservados.
+    </div>
+  </div>
+</footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function agregarAlCarrito(nombre, precio, imagen) {
+      const carrito = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
+      carrito.push({ nombre, precio, imagen });
+      localStorage.setItem("carritoUrbanCops", JSON.stringify(carrito));
+      actualizarContadorCarrito();
+    }
+
+    function actualizarContadorCarrito() {
+      const carrito = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
+      const contador = document.getElementById("contador-carrito");
+      if (contador) contador.textContent = carrito.length;
+    }
+
+    document.addEventListener("DOMContentLoaded", actualizarContadorCarrito);
+  </script>
+  <script>
+  function buscarGorra(event) {
+    event.preventDefault();
+    const busqueda = document.getElementById('barra-busqueda').value.toLowerCase().trim();
+
+    
+
+    if (rutas[busqueda]) {
+      window.location.href = rutas[busqueda];
+    } else {
+      alert("No se encontró la gorra. Intenta con: trucker, lakers, snapback...");
+    }
+  }
+</script>
+</body>
+</html>

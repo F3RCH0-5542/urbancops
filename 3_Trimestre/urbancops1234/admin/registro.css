@@ -1,0 +1,76 @@
+body {
+  background-color: #000000;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+}
+
+.navbar, .dropdown-menu {
+  background-color: #000;
+}
+.navbar .nav-link,
+.navbar .navbar-brand,
+.navbar .dropdown-item {
+  color: #fff !important;
+}
+.navbar .dropdown-item:hover {
+  background-color: #faf2f2;
+}
+
+/* Caja del formulario en modo oscuro */
+.container .form-box,
+.form-box {
+  background-color: #111;
+  padding: 30px;
+  border-radius: 10px;
+  border: 1px solid #fffbfb;
+  box-shadow: 0 0 10px rgb(219, 210, 210);
+  color: #f9f8f8;
+}
+
+/* Etiquetas */
+.form-label {
+  color: #f0f0f0;
+}
+
+/* Inputs */
+.form-control {
+  background-color: #1a1a1a;
+  color: #fff;
+  border: 1px solid #ffffff;
+}
+.form-control:focus {
+  border-color: #ffffff;
+  background-color: #1a1a1a;
+  box-shadow: none;
+}
+.form-control::placeholder {
+  color: #ffffff;
+}
+
+/* Botón */
+.btn-dark {
+  background-color: #fff;
+  color: #000;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+.btn-dark:hover {
+  background-color: #ccc;
+  color: #000;
+}
+
+/* Footer */
+footer {
+  background-color: #111;
+  color: #fff;
+}
+
+/* Enlaces */
+a {
+  color: #fff;
+  text-decoration: underline;
+}
+a:hover {
+  color: #ffffff;
+}

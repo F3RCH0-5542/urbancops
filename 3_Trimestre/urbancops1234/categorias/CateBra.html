@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UrbanCops - Sistema de Gestión</title>
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../principal/style.css"> 
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg shadow-sm sticky-top bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="../principal/index.html"><img src="../img/logo12.png" alt="UrbanCops" width="40"></a>
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarGorras">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarGorras">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">NBA</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="CateChi.html">Chicago Bulls</a></li>
+            <li><a class="dropdown-item" href="CateBo.html">Boston Celtics</a></li>
+            <li><a class="dropdown-item" href="CateAn.html">Los Angeles Lakers</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">NFL</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="cateatl.html">Atlanta Falcons</a></li>
+            <li><a class="dropdown-item" href="cateAri.html">Arizona Cardinals</a></li>
+            <li><a class="dropdown-item" href="catevegas.html">Las Vegas Raiders</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">MBL</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="CateRed.html">Boston Red Sox</a></li>
+            <li><a class="dropdown-item" href="CateBo.html">Chicago White Sox</a></li>
+            <li><a class="dropdown-item" href="CateWhi.html">Atlanta Braves</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link fw-bold" href="../personalizacion/personalizadas.html">Personalizadas</a></li>
+        <li class="nav-item"><a class="nav-link fw-bold" href="../pqrs/PQRS.html">PQRS</a></li>
+      </ul>
+      <form class="d-flex me-3" onsubmit="buscarGorra(event)">
+        <input id="barra-busqueda" class="form-control" type="search" placeholder="Buscar gorras..." aria-label="Buscar">
+      </form>
+      <a href="../login/login.php" class="btn text-white"><i class="bi bi-person"></i></a>
+      <button class="btn text-white position-relative" onclick="window.location.href='../carrito/carrito.html'">
+        <i class="bi bi-cart"></i>
+        <span id="contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+
+  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="../img/Braves/Wall.jpg" class="d-block w-100" alt="Slide 1">
+      </div>
+     
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+
+
+
+  <!---- NBA --->
+
+
+
+  <section class="container my-5 text-center">
+    <h2>Atlanta Braves</h2>
+    <p> Los Atlanta Braves son un equipo de béisbol profesional con sede en Atlanta, Georgia.
+         Fundado en 1871, es uno de los equipos más antiguos de las Grandes Ligas.
+          Con una rica historia y múltiples campeonatos,
+           los Braves son símbolo de orgullo para su ciudad y tienen una gran base de fanáticos.</p>
+
+    <div class="row justify-content-center mt-4">
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Atlanta Braves Classic Fit</h3>
+          <img src="../img/Braves/1-removebg-preview.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Gorra New Era 59FIFTY de la colección NBA Classic.</p>
+          <p class="fw-bold">$95.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Chicago Bulls', 95000, '../img/Braves/1-removebg-preview.png')">Agregar al carrito</button>
+        </div>
+      </div>
+   
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Atlanta Braves Heritage Line</h3>
+          <img src="../img/Braves/2-removebg-preview.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Gorra con logotipo bordado y diseño premium.</p>
+          <p class="fw-bold">$92.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Boston Celtics', 92000, '../img/Braves/2-removebg-preview.png')">Agregar al carrito</button>
+        </div>
+      </div>
+  
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Atlanta Braves Night Game</h3>
+          <img src="../img/Braves/3-removebg-preview.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Modelo clásico con detalles bordados oficiales.</p>
+          <p class="fw-bold">$98.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Los Angeles Lakers', 98000, '../img/Braves/3-removebg-preview.png')">Agregar al carrito</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section class="container my-5 text-center">
+    <div class="row justify-content-center mt-4">
+     
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Atlanta Braves Retro Swing</h3>
+          <img src="../img/Braves/4-removebg-preview.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Gorra New Era multi color.</p>
+          <p class="fw-bold">$95.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Chicago Bulls', 95000, '../img/Braves/4-removebg-preview.png')">Agregar al carrito</button>
+        </div>
+      </div>
+     
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Atlanta Braves Southern Pride</h3>
+          <img src="../img/Braves/5-removebg-preview.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Gorra con logotipo bordado y diseño premium.</p>
+          <p class="fw-bold">$92.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Boston Celtics', 92000, '../img/Braves/5-removebg-preview.png')">Agregar al carrito</button>
+        </div>
+      </div>
+  
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Atlanta Braves Bold Edition</h3>
+          <img src="../img/Braves/6-removebg-preview.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Modelo clásico con detalles bordados oficiales.</p>
+          <p class="fw-bold">$98.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Los Angeles Lakers', 98000, '../img/Braves/6-removebg-preview.png')">Agregar al carrito</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+   <section class="container my-5 text-center">
+    <div class="row justify-content-center mt-4">
+     
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Atlanta Braves Street Style</h3>
+          <img src="../img/Braves/7-removebg-preview.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Gorra New Era de la colección NBA Classic.</p>
+          <p class="fw-bold">$95.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Chicago Bulls', 95000, '../img/Braves/7-removebg-preview.png')">Agregar al carrito</button>
+        </div>
+      </div>
+     
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Atlanta Braves Home Field</h3>
+          <img src="../img/Braves/8-removebg-preview.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Gorra con logotipo bordado y diseño premium.</p>
+          <p class="fw-bold">$92.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Boston Celtics', 92000, '../img/Braves/8-removebg-preview.png')">Agregar al carrito</button>
+        </div>
+      </div>
+  
+      <div class="col-md-4 mb-4">
+        <div class="p-3 rounded text-dark-bg">
+          <h3>Atlanta Braves Legacy Cap</h3>
+          <img src="../img/Braves/9-removebg-preview.png" class="img-fluid my-2" style="height: 100px; object-fit: cover;">
+          <p>Modelo clásico con detalles bordados oficiales.</p>
+          <p class="fw-bold">$98.000 COP</p>
+          <button class="btn btn-primary w-100" onclick="agregarAlCarrito('Los Angeles Lakers', 98000, '../img/Braves/9-removebg-preview.png')">Agregar al carrito</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+
+
+  <section class="container my-5 text-center">
+  <footer class="bg-black text-white pt-5 pb-3 mt-5">
+  <div class="container"> 
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold">UrbanCops</h5>
+        <p>Gorras urbanas exclusivas con estilo auténtico. Representa tu equipo, tu barrio y tu esencia.</p>
+        <div>
+          <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold">Enlaces Rápidos</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Inicio</a></li>
+          <li><a href="#" class="text-white text-decoration-none">NBA</a></li>
+          <li><a href="#" class="text-white text-decoration-none">MLB</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Personalizadas</a></li>
+        </ul>
+      </div>
+
+   
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold">Contacto</h5>
+        <p><i class="bi bi-envelope"></i> contacto@urbancops.com</p>
+        <p><i class="bi bi-phone"></i> +57 310 000 0000</p>
+        <p><i class="bi bi-geo-alt"></i> Bogotá, Colombia</p>
+      </div>
+
+    </div>
+
+    <hr class="border-gray" />
+
+    <div class="text-center small">
+      &copy; 2025 UrbanCops. Todos los derechos reservados.
+    </div>
+  </div>
+</footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+ 
+  <script>
+    function agregarAlCarrito(nombre, precio, imagen) { 
+      const carrito = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
+      carrito.push({ nombre, precio, imagen });
+      localStorage.setItem("carritoUrbanCops", JSON.stringify(carrito));
+      actualizarContadorCarrito();
+    }
+
+    function actualizarContadorCarrito() {
+      const carrito = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
+      const contador = document.getElementById("contador-carrito");
+      if (contador) contador.textContent = carrito.length;
+    }
+
+    document.addEventListener("DOMContentLoaded", actualizarContadorCarrito);
+  </script>
+  <script>
+  function buscarGorra(event) {
+    event.preventDefault();
+    const busqueda = document.getElementById('barra-busqueda').value.toLowerCase().trim();
+
+    
+
+    if (rutas[busqueda]) {
+      window.location.href = rutas[busqueda];
+    } else {
+      alert("No se encontró la gorra. Intenta con: trucker, lakers, snapback...");
+    }
+  }
+</script>
+
+</body>
+</html>
