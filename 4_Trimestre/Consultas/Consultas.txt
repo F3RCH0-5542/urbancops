@@ -1,0 +1,506 @@
+USE urban1;
+
+-- =============================================
+-- CONSULTAS SIMPLES (1-20)
+-- =============================================
+
+-- 1. Total de pedidos por usuario
+-- Muestra cuántos pedidos ha realizado cada cliente
+SELECT u.nombre, u.apellido, u.correo, COUNT(p.id_pedido) AS total_pedidos
+FROM usuarios u
+LEFT JOIN pedido p ON u.id_usuario = p.id_usuario
+GROUP BY u.id_usuario
+ORDER BY total_pedidos DESC;
+
+-- 2. Productos con stock bajo el mínimo
+-- Identifica productos que necesitan reabastecimiento urgente
+SELECT pr.nombre_producto, pr.stock_disponible, i.stock_minimo
+FROM productos pr
+JOIN inventario i ON pr.id_producto = i.id_producto
+WHERE pr.stock_disponible <= i.stock_minimo
+GROUP BY pr.id_producto;
+
+-- 3. Pedidos por estado
+-- Resumen de cuántos pedidos hay en cada estado
+SELECT estado, COUNT(*) AS total
+FROM pedido
+GROUP BY estado
+ORDER BY total DESC;
+
+-- 4. Productos más vendidos
+-- Muestra los productos que más veces han sido pedidos
+SELECT dp.nombre_producto, SUM(dp.cantidad) AS total_vendido
+FROM detalle_pedido dp
+GROUP BY dp.id_producto
+ORDER BY total_vendido DESC
+LIMIT 10;
+
+-- 5. Ingresos totales por mes
+-- Muestra los ingresos generados cada mes
+SELECT DATE_FORMAT(fecha_pedido, '%Y-%m') AS mes,
+       SUM(total) AS ingresos
+FROM pedido
+WHERE estado != 'cancelado'
+GROUP BY mes
+ORDER BY mes DESC;
+
+-- 6. Clientes con más de 3 pedidos
+-- Identifica los clientes más frecuentes
+SELECT u.nombre, u.apellido, u.correo, COUNT(p.id_pedido) AS total_pedidos
+FROM usuarios u
+JOIN pedido p ON u.id_usuario = p.id_usuario
+GROUP BY u.id_usuario
+HAVING total_pedidos > 3
+ORDER BY total_pedidos DESC;
+
+-- 7. PQRS por tipo
+-- Muestra cuántas peticiones, quejas, reclamos y sugerencias hay
+SELECT tipo_pqrs, COUNT(*) AS total
+FROM pqrs
+GROUP BY tipo_pqrs;
+
+-- 8. Envíos pendientes por ciudad
+-- Muestra cuántos envíos están pendientes por ciudad
+SELECT ciudad, COUNT(*) AS total_pendientes
+FROM envio
+WHERE estado_envio = 'pendiente'
+GROUP BY ciudad
+ORDER BY total_pendientes DESC;
+
+-- 9. Ventas completadas por usuario
+-- Muestra el total de ventas completadas por cada cliente
+SELECT u.nombre, u.apellido, COUNT(v.id_venta) AS ventas_completadas,
+       SUM(v.total) AS total_ingresos
+FROM usuarios u
+JOIN ventas v ON u.id_usuario = v.id_usuario
+WHERE v.estado = 'completada'
+GROUP BY u.id_usuario
+ORDER BY total_ingresos DESC;
+
+-- 10. Personalizaciones por estado
+-- Resumen del estado de todas las personalizaciones
+SELECT estado, COUNT(*) AS total
+FROM personalizacion
+GROUP BY estado;
+
+-- 11. Productos por categoría
+-- Muestra cuántos productos hay en cada categoría
+SELECT categoria, COUNT(*) AS total_productos,
+       AVG(precio_base) AS precio_promedio
+FROM productos
+WHERE activo = 1
+GROUP BY categoria;
+
+-- 12. Métodos de pago más usados
+-- Identifica qué métodos de pago prefieren los clientes
+SELECT metodo_pago, COUNT(*) AS total_usos
+FROM pago
+GROUP BY metodo_pago
+ORDER BY total_usos DESC;
+
+-- 13. Detalle de pedidos con su total
+-- Muestra cada pedido con sus productos y subtotales
+SELECT p.id_pedido, u.nombre, u.apellido,
+       dp.nombre_producto, dp.cantidad, dp.precio_unitario, dp.subtotal
+FROM pedido p
+JOIN usuarios u ON p.id_usuario = u.id_usuario
+JOIN detalle_pedido dp ON p.id_pedido = dp.id_pedido
+ORDER BY p.id_pedido;
+
+-- 14. PQRS sin respuesta
+-- Identifica las PQRS que aún no han sido atendidas
+SELECT id_pqrs, nombre, correo, tipo_pqrs, descripcion, fecha_solicitud
+FROM pqrs
+WHERE respuesta IS NULL OR respuesta = ''
+ORDER BY fecha_solicitud ASC;
+
+-- 15. Movimientos de inventario por tipo
+-- Resumen de entradas, salidas y ajustes de inventario
+SELECT tipo, COUNT(*) AS total_movimientos, SUM(cantidad) AS total_unidades
+FROM inventario
+GROUP BY tipo;
+
+-- 16. Usuarios registrados por mes
+-- Muestra cuántos usuarios se registraron cada mes
+SELECT DATE_FORMAT(FROM_UNIXTIME(id_usuario), '%Y-%m') AS mes,
+       COUNT(*) AS nuevos_usuarios
+FROM usuarios
+GROUP BY mes;
+
+-- 17. Pedidos con envío y pago registrado
+-- Muestra pedidos que tienen tanto envío como pago asociado
+SELECT p.id_pedido, u.nombre, p.total, e.estado_envio, pg.estado_pago
+FROM pedido p
+JOIN usuarios u ON p.id_usuario = u.id_usuario
+JOIN envio e ON p.id_pedido = e.id_pedido
+JOIN pago pg ON p.id_pedido = pg.id_pedido
+ORDER BY p.id_pedido;
+
+-- 18. Personalizaciones aprobadas con precio adicional
+-- Lista las personalizaciones aprobadas y su costo extra
+SELECT pr.id_personalizacion, u.nombre, pr.tipo_personalizacion,
+       pr.descripcion_personalizacion, pr.precio_adicional
+FROM personalizacion pr
+JOIN pedido p ON pr.id_pedido = p.id_pedido
+JOIN usuarios u ON p.id_usuario = u.id_usuario
+WHERE pr.estado = 'aprobada'
+ORDER BY pr.precio_adicional DESC;
+
+-- 19. Productos sin movimiento en inventario
+-- Detecta productos que nunca han tenido movimiento
+SELECT pr.id_producto, pr.nombre_producto, pr.stock_disponible
+FROM productos pr
+LEFT JOIN inventario i ON pr.id_producto = i.id_producto
+WHERE i.id_inventario IS NULL;
+
+-- 20. Resumen general del sistema
+-- Vista rápida de totales de todas las tablas principales
+SELECT 'Usuarios' AS entidad, COUNT(*) AS total FROM usuarios
+UNION ALL
+SELECT 'Productos', COUNT(*) FROM productos WHERE activo = 1
+UNION ALL
+SELECT 'Pedidos', COUNT(*) FROM pedido
+UNION ALL
+SELECT 'Ventas completadas', COUNT(*) FROM ventas WHERE estado = 'completada'
+UNION ALL
+SELECT 'PQRS pendientes', COUNT(*) FROM pqrs WHERE estado = 'Pendiente'
+UNION ALL
+SELECT 'Envíos pendientes', COUNT(*) FROM envio WHERE estado_envio = 'pendiente'
+UNION ALL
+SELECT 'Personalizaciones pendientes', COUNT(*) FROM personalizacion WHERE estado = 'pendiente';
+
+-- =============================================
+-- CONSULTAS CON JOIN (21-35)
+-- =============================================
+
+-- 21. Pedidos con todos sus datos completos
+-- Muestra pedido, cliente, productos, pago y envío
+SELECT p.id_pedido, u.nombre, u.apellido,
+       p.fecha_pedido, p.total, p.estado,
+       e.estado_envio, pg.estado_pago
+FROM pedido p
+JOIN usuarios u ON p.id_usuario = u.id_usuario
+LEFT JOIN envio e ON p.id_pedido = e.id_pedido
+LEFT JOIN pago pg ON p.id_pedido = pg.id_pedido
+ORDER BY p.fecha_pedido DESC;
+
+-- 22. Clientes con PQRS resueltas
+-- Muestra clientes cuyas quejas fueron atendidas
+SELECT u.nombre, u.apellido, pq.tipo_pqrs,
+       pq.descripcion, pq.respuesta, pq.fecha_respuesta
+FROM usuarios u
+JOIN pqrs pq ON u.id_usuario = pq.id_usuario
+WHERE pq.estado = 'Resuelto'
+ORDER BY pq.fecha_respuesta DESC;
+
+-- 23. Productos con su historial de movimientos
+-- Muestra cada producto con sus entradas y salidas
+SELECT pr.nombre_producto, i.tipo, i.cantidad,
+       i.stock_resultante, i.motivo, i.fecha_movimiento
+FROM productos pr
+JOIN inventario i ON pr.id_producto = i.id_producto
+ORDER BY pr.id_producto, i.fecha_movimiento DESC;
+
+-- 24. Pedidos con personalización aprobada
+-- Lista pedidos que tienen personalizaciones ya aprobadas
+SELECT p.id_pedido, u.nombre, pr.tipo_personalizacion,
+       pr.descripcion_personalizacion, pr.precio_adicional
+FROM pedido p
+JOIN usuarios u ON p.id_usuario = u.id_usuario
+JOIN personalizacion pr ON p.id_pedido = pr.id_pedido
+WHERE pr.estado = 'aprobada';
+
+-- 25. Ventas con detalle de pedido
+-- Muestra ventas con los productos incluidos
+SELECT v.id_venta, u.nombre, dp.nombre_producto,
+       dp.cantidad, dp.subtotal, v.estado
+FROM ventas v
+JOIN usuarios u ON v.id_usuario = u.id_usuario
+JOIN pedido p ON v.id_pedido = p.id_pedido
+JOIN detalle_pedido dp ON p.id_pedido = dp.id_pedido
+ORDER BY v.id_venta;
+
+-- 26. Usuarios con rol y total gastado
+-- Muestra el rol de cada usuario y cuánto ha gastado
+SELECT u.nombre, u.apellido, r.nombre_rol,
+       COALESCE(SUM(p.total), 0) AS total_gastado
+FROM usuarios u
+JOIN rol r ON u.id_rol = r.id_rol
+LEFT JOIN pedido p ON u.id_usuario = p.id_usuario
+GROUP BY u.id_usuario
+ORDER BY total_gastado DESC;
+
+-- 27. Envíos con datos del cliente y pedido
+-- Muestra cada envío con información completa
+SELECT e.id_envio, u.nombre, u.apellido,
+       e.direccion, e.ciudad, e.telefono, e.estado_envio, e.fecha
+FROM envio e
+JOIN pedido p ON e.id_pedido = p.id_pedido
+JOIN usuarios u ON p.id_usuario = u.id_usuario
+ORDER BY e.fecha DESC;
+
+-- 28. Pagos con datos del cliente
+-- Muestra cada pago con el cliente que lo realizó
+SELECT pg.id_pago, u.nombre, u.apellido,
+       pg.metodo_pago, pg.monto, pg.estado_pago, pg.fecha_pago
+FROM pago pg
+JOIN pedido p ON pg.id_pedido = p.id_pedido
+JOIN usuarios u ON p.id_usuario = u.id_usuario
+ORDER BY pg.fecha_pago DESC;
+
+-- 29. Categorías con más ventas
+-- Muestra qué categoría de gorras se vende más
+SELECT pr.categoria, SUM(dp.cantidad) AS unidades_vendidas,
+       SUM(dp.subtotal) AS ingresos_categoria
+FROM productos pr
+JOIN detalle_pedido dp ON pr.id_producto = dp.id_producto
+GROUP BY pr.categoria
+ORDER BY ingresos_categoria DESC;
+
+-- 30. Pedidos en proceso con su envío
+-- Lista pedidos en proceso y el estado de su envío
+SELECT p.id_pedido, u.nombre, p.total,
+       p.estado AS estado_pedido, e.estado_envio
+FROM pedido p
+JOIN usuarios u ON p.id_usuario = u.id_usuario
+LEFT JOIN envio e ON p.id_pedido = e.id_pedido
+WHERE p.estado = 'en_proceso';
+
+-- 31. Productos más personalizados
+-- Muestra qué productos se personalizan más
+SELECT pr.nombre_producto, COUNT(pers.id_personalizacion) AS total_personalizaciones
+FROM productos pr
+JOIN personalizacion pers ON pr.id_producto = pers.id_producto
+GROUP BY pr.id_producto
+ORDER BY total_personalizaciones DESC;
+
+-- 32. PQRS por usuario con su total de pedidos
+-- Relaciona quejas con el historial de compras del cliente
+SELECT u.nombre, u.apellido,
+       COUNT(DISTINCT pq.id_pqrs) AS total_pqrs,
+       COUNT(DISTINCT p.id_pedido) AS total_pedidos
+FROM usuarios u
+LEFT JOIN pqrs pq ON u.id_usuario = pq.id_usuario
+LEFT JOIN pedido p ON u.id_usuario = p.id_usuario
+GROUP BY u.id_usuario
+HAVING total_pqrs > 0
+ORDER BY total_pqrs DESC;
+
+-- 33. Inventario con alertas de stock crítico
+-- Muestra productos con stock por debajo del mínimo
+SELECT pr.nombre_producto, pr.categoria,
+       pr.stock_disponible, i.stock_minimo,
+       (i.stock_minimo - pr.stock_disponible) AS unidades_faltantes
+FROM productos pr
+JOIN inventario i ON pr.id_producto = i.id_producto
+WHERE pr.stock_disponible < i.stock_minimo
+GROUP BY pr.id_producto
+ORDER BY unidades_faltantes DESC;
+
+-- 34. Personalizaciones con talla y color por usuario
+-- Muestra las preferencias de personalización de cada cliente
+SELECT u.nombre, pers.tipo_personalizacion,
+       pers.talla, pers.color_deseado, pers.estado
+FROM personalizacion pers
+JOIN pedido p ON pers.id_pedido = p.id_pedido
+JOIN usuarios u ON p.id_usuario = u.id_usuario
+WHERE pers.talla IS NOT NULL
+ORDER BY u.nombre;
+
+-- 35. Total de ingresos por método de pago
+-- Muestra cuánto dinero ingresó por cada método
+SELECT pg.metodo_pago,
+       COUNT(*) AS total_transacciones,
+       SUM(CAST(pg.monto AS DECIMAL(10,2))) AS total_ingresos
+FROM pago pg
+WHERE pg.estado_pago = 'completado'
+GROUP BY pg.metodo_pago
+ORDER BY total_ingresos DESC;
+
+-- =============================================
+-- SUBCONSULTAS (36-50)
+-- =============================================
+
+-- 36. Usuarios que han gastado más que el promedio
+-- Detecta clientes premium
+SELECT u.nombre, u.apellido,
+       SUM(p.total) AS total_gastado
+FROM usuarios u
+JOIN pedido p ON u.id_usuario = p.id_usuario
+GROUP BY u.id_usuario
+HAVING total_gastado > (
+    SELECT AVG(total_por_usuario)
+    FROM (
+        SELECT SUM(total) AS total_por_usuario
+        FROM pedido
+        GROUP BY id_usuario
+    ) AS sub
+)
+ORDER BY total_gastado DESC;
+
+-- 37. Productos que nunca han sido pedidos
+-- Detecta productos sin demanda
+SELECT id_producto, nombre_producto, categoria, precio_base
+FROM productos
+WHERE id_producto NOT IN (
+    SELECT DISTINCT id_producto
+    FROM detalle_pedido
+    WHERE id_producto IS NOT NULL
+)
+AND activo = 1;
+
+-- 38. Clientes con PQRS pero sin pedidos recientes
+-- Detecta clientes insatisfechos que dejaron de comprar
+SELECT u.nombre, u.apellido, u.correo,
+       COUNT(pq.id_pqrs) AS total_pqrs
+FROM usuarios u
+JOIN pqrs pq ON u.id_usuario = pq.id_usuario
+WHERE u.id_usuario NOT IN (
+    SELECT DISTINCT id_usuario
+    FROM pedido
+    WHERE fecha_pedido >= DATE_SUB(NOW(), INTERVAL 3 MONTH)
+)
+GROUP BY u.id_usuario;
+
+-- 39. Pedido con mayor total de cada usuario
+-- Muestra el pedido más grande de cada cliente
+SELECT u.nombre, u.apellido, p.id_pedido, p.total, p.fecha_pedido
+FROM pedido p
+JOIN usuarios u ON p.id_usuario = u.id_usuario
+WHERE p.total = (
+    SELECT MAX(total)
+    FROM pedido p2
+    WHERE p2.id_usuario = p.id_usuario
+);
+
+-- 40. Productos con precio mayor al promedio de su categoría
+-- Identifica productos premium dentro de su categoría
+SELECT nombre_producto, categoria, precio_base
+FROM productos
+WHERE precio_base > (
+    SELECT AVG(precio_base)
+    FROM productos p2
+    WHERE p2.categoria = productos.categoria
+)
+AND activo = 1
+ORDER BY categoria, precio_base DESC;
+
+-- 41. Usuarios que han hecho personalizaciones pero no tienen PQRS
+-- Clientes satisfechos que usan funciones avanzadas
+SELECT DISTINCT u.nombre, u.apellido, u.correo
+FROM usuarios u
+JOIN pedido p ON u.id_usuario = p.id_usuario
+JOIN personalizacion pers ON p.id_pedido = pers.id_pedido
+WHERE u.id_usuario NOT IN (
+    SELECT DISTINCT id_usuario
+    FROM pqrs
+    WHERE id_usuario IS NOT NULL
+);
+
+-- 42. Mes con más pedidos del año actual
+-- Identifica el mes más activo en ventas
+SELECT DATE_FORMAT(fecha_pedido, '%Y-%m') AS mes,
+       COUNT(*) AS total_pedidos
+FROM pedido
+WHERE YEAR(fecha_pedido) = YEAR(NOW())
+GROUP BY mes
+HAVING total_pedidos = (
+    SELECT MAX(total_mes)
+    FROM (
+        SELECT COUNT(*) AS total_mes
+        FROM pedido
+        WHERE YEAR(fecha_pedido) = YEAR(NOW())
+        GROUP BY DATE_FORMAT(fecha_pedido, '%Y-%m')
+    ) AS sub
+);
+
+-- 43. Clientes con más de un envío pendiente
+-- Detecta posibles problemas logísticos
+SELECT u.nombre, u.apellido, COUNT(e.id_envio) AS envios_pendientes
+FROM usuarios u
+JOIN pedido p ON u.id_usuario = p.id_usuario
+JOIN envio e ON p.id_pedido = e.id_pedido
+WHERE e.estado_envio = 'pendiente'
+GROUP BY u.id_usuario
+HAVING envios_pendientes > 1;
+
+-- 44. Productos con más de 5 movimientos de salida
+-- Detecta los productos más demandados
+SELECT pr.nombre_producto, COUNT(i.id_inventario) AS total_salidas
+FROM productos pr
+JOIN inventario i ON pr.id_producto = i.id_producto
+WHERE i.tipo = 'salida'
+GROUP BY pr.id_producto
+HAVING total_salidas > 5
+ORDER BY total_salidas DESC;
+
+-- 45. Pedidos cuyo total supera el promedio general
+-- Identifica pedidos de alto valor
+SELECT p.id_pedido, u.nombre, u.apellido, p.total, p.fecha_pedido
+FROM pedido p
+JOIN usuarios u ON p.id_usuario = u.id_usuario
+WHERE p.total > (
+    SELECT AVG(total) FROM pedido
+)
+ORDER BY p.total DESC;
+
+-- 46. Tipo de personalización más solicitado por categoría de producto
+-- Muestra preferencias de personalización por tipo de gorra
+SELECT pr.categoria, pers.tipo_personalizacion,
+       COUNT(*) AS total_solicitudes
+FROM personalizacion pers
+JOIN pedido p ON pers.id_pedido = p.id_pedido
+JOIN detalle_pedido dp ON p.id_pedido = dp.id_pedido
+JOIN productos pr ON dp.id_producto = pr.id_producto
+GROUP BY pr.categoria, pers.tipo_personalizacion
+ORDER BY pr.categoria, total_solicitudes DESC;
+
+-- 47. Usuarios que compraron en el último mes
+-- Identifica clientes activos recientemente
+SELECT u.nombre, u.apellido, u.correo,
+       COUNT(p.id_pedido) AS pedidos_recientes,
+       SUM(p.total) AS total_gastado
+FROM usuarios u
+JOIN pedido p ON u.id_usuario = p.id_usuario
+WHERE p.fecha_pedido >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
+GROUP BY u.id_usuario
+ORDER BY total_gastado DESC;
+
+-- 48. PQRS respondidas en menos de 24 horas
+-- Mide la eficiencia del servicio al cliente
+SELECT id_pqrs, nombre, tipo_pqrs,
+       fecha_solicitud, fecha_respuesta,
+       TIMESTAMPDIFF(HOUR, fecha_solicitud, fecha_respuesta) AS horas_respuesta
+FROM pqrs
+WHERE fecha_respuesta IS NOT NULL
+AND TIMESTAMPDIFF(HOUR, fecha_solicitud, fecha_respuesta) <= 24
+ORDER BY horas_respuesta ASC;
+
+-- 49. Resumen de ingresos por usuario y estado de pedido
+-- Vista financiera completa por cliente
+SELECT u.nombre, u.apellido,
+       p.estado,
+       COUNT(p.id_pedido) AS total_pedidos,
+       SUM(p.total) AS total_ingresos
+FROM usuarios u
+JOIN pedido p ON u.id_usuario = p.id_usuario
+GROUP BY u.id_usuario, p.estado
+ORDER BY u.nombre, total_ingresos DESC;
+
+-- 50. Análisis completo: cliente, pedidos, pagos, envíos y PQRS
+-- Vista 360 de cada cliente en el sistema
+SELECT u.nombre, u.apellido, u.correo,
+       COUNT(DISTINCT p.id_pedido) AS total_pedidos,
+       COUNT(DISTINCT pg.id_pago) AS total_pagos,
+       COUNT(DISTINCT e.id_envio) AS total_envios,
+       COUNT(DISTINCT pers.id_personalizacion) AS total_personalizaciones,
+       COUNT(DISTINCT pq.id_pqrs) AS total_pqrs,
+       COALESCE(SUM(p.total), 0) AS total_gastado
+FROM usuarios u
+LEFT JOIN pedido p ON u.id_usuario = p.id_usuario
+LEFT JOIN pago pg ON p.id_pedido = pg.id_pedido
+LEFT JOIN envio e ON p.id_pedido = e.id_pedido
+LEFT JOIN personalizacion pers ON p.id_pedido = pers.id_pedido
+LEFT JOIN pqrs pq ON u.id_usuario = pq.id_usuario
+GROUP BY u.id_usuario
+ORDER BY total_gastado DESC;
