@@ -1,4 +1,6 @@
+// ✅ Corregido
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { listRegistros, createRegistro } from "../services/registrosService";
 
 const Registros = ({ token, onLogout }) => {
@@ -21,10 +23,9 @@ const Registros = ({ token, onLogout }) => {
       setError(null);
       const data = await listRegistros(token);
       setRegistros(data);
-    } catch (error) {
-      console.error("Error al obtener registros:", error);
-
-      if (error.response?.status === 401 || error.response?.status === 403) {
+    } catch (err) {
+      console.error("Error al obtener registros:", err);
+      if (err.response?.status === 401 || err.response?.status === 403) {
         setError("Sesión expirada. Por favor, inicia sesión nuevamente.");
         if (onLogout) onLogout();
       } else {
@@ -40,22 +41,19 @@ const Registros = ({ token, onLogout }) => {
       setError("Debes iniciar sesión para crear registros");
       return;
     }
-
     if (!newRegistro.trim()) {
       setError("Por favor ingresa un nombre");
       return;
     }
-
     try {
       setLoading(true);
       setError(null);
       const data = await createRegistro({ name: newRegistro }, token);
       setRegistros([...registros, data]);
       setNewRegistro("");
-    } catch (error) {
-      console.error("Error al crear registro:", error);
-
-      if (error.response?.status === 401 || error.response?.status === 403) {
+    } catch (err) {
+      console.error("Error al crear registro:", err);
+      if (err.response?.status === 401 || err.response?.status === 403) {
         setError("Sesión expirada. Por favor, inicia sesión nuevamente.");
         if (onLogout) onLogout();
       } else {
@@ -99,6 +97,7 @@ const Registros = ({ token, onLogout }) => {
           onChange={(e) => setNewRegistro(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Escribe un nuevo registro..."
+          aria-label="Nuevo registro"
         />
         <button onClick={handleCreateRegistro} disabled={loading}>
           {loading ? "⏳ Guardando..." : "➕ Crear"}
@@ -117,6 +116,11 @@ const Registros = ({ token, onLogout }) => {
       )}
     </div>
   );
+};
+
+Registros.propTypes = {
+  token:    PropTypes.string.isRequired,
+  onLogout: PropTypes.func.isRequired,
 };
 
 export default Registros;

@@ -1,4 +1,42 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+
+// ✅ FIX: TeamCard definida FUERA de Categorias para evitar errores de PropTypes y re-renders
+function TeamCard({ equipo, btnClass }) {
+  return (
+    <article
+      className="card h-100 shadow-sm border-0"
+      style={{ transition: 'transform 0.3s', cursor: 'pointer' }}
+      aria-label={equipo.nombre}
+      onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+      onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+    >
+      <div className="card-body text-center p-4">
+        <img
+          src={equipo.imagen}
+          alt={equipo.nombre}
+          className="img-fluid mb-3"
+          style={{ height: '120px', objectFit: 'contain' }}
+        />
+        <h4 className="fw-bold mb-2">{equipo.nombre}</h4>
+        <p className="text-muted small mb-3">{equipo.desc}</p>
+        <a href={equipo.ruta} className={`btn ${btnClass} w-100`}>
+          Ver Colección <i className="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </article>
+  );
+}
+
+TeamCard.propTypes = {
+  equipo: PropTypes.shape({
+    nombre: PropTypes.string.isRequired,
+    imagen: PropTypes.string.isRequired,
+    ruta:   PropTypes.string.isRequired,
+    desc:   PropTypes.string.isRequired,
+  }).isRequired,
+  btnClass: PropTypes.string.isRequired,
+};
 
 function Categorias() {
   const [contadorCarrito, setContadorCarrito] = useState(0);
@@ -14,19 +52,19 @@ function Categorias() {
 
   const todosLosEquipos = {
     nba: [
-      { nombre: 'Chicago Bulls', imagen: '/img/chicago.png', ruta: '/chicago', desc: 'El legendario equipo de Michael Jordan' },
-      { nombre: 'Boston Celtics', imagen: '/img/chicago.png', ruta: '/boston', desc: 'La franquicia más ganadora de la NBA' },
-      { nombre: 'Los Angeles Lakers', imagen: '/img/Lakers12.png', ruta: '/lakers', desc: 'El show time de la costa oeste' }
+      { nombre: 'Chicago Bulls',      imagen: '/img/chicago.png',   ruta: '/chicago', desc: 'El legendario equipo de Michael Jordan' },
+      { nombre: 'Boston Celtics',     imagen: '/img/chicago.png',   ruta: '/boston',  desc: 'La franquicia más ganadora de la NBA' },
+      { nombre: 'Los Angeles Lakers', imagen: '/img/Lakers12.png',  ruta: '/lakers',  desc: 'El show time de la costa oeste' }
     ],
     nfl: [
-      { nombre: 'Atlanta Falcons', imagen: '/img/Atlanta12.png', ruta: '/falcon', desc: 'Los halcones del sur profundo' },
+      { nombre: 'Atlanta Falcons',   imagen: '/img/Atlanta12.png', ruta: '/falcon',  desc: 'Los halcones del sur profundo' },
       { nombre: 'Arizona Cardinals', imagen: '/img/Arizona12.png', ruta: '/arizona', desc: 'El equipo más antiguo de la NFL' },
-      { nombre: 'Las Vegas Raiders', imagen: '/img/Raiders12.png', ruta: '/vegas', desc: 'La nación Raider en el desierto' }
+      { nombre: 'Las Vegas Raiders', imagen: '/img/Raiders12.png', ruta: '/vegas',   desc: 'La nación Raider en el desierto' }
     ],
     mlb: [
-      { nombre: 'Boston Red Sox', imagen: '/img/chicago.png', ruta: '/red', desc: 'Los medias rojas de Fenway Park' },
-      { nombre: 'Chicago White Sox', imagen: '/img/chicago.png', ruta: '/white', desc: 'El orgullo del South Side' },
-      { nombre: 'Atlanta Braves', imagen: '/img/Atlanta12.png', ruta: '/atlanta', desc: 'Los bravos campeones del sureste' }
+      { nombre: 'Boston Red Sox',    imagen: '/img/chicago.png',   ruta: '/red',     desc: 'Los medias rojas de Fenway Park' },
+      { nombre: 'Chicago White Sox', imagen: '/img/chicago.png',   ruta: '/white',   desc: 'El orgullo del South Side' },
+      { nombre: 'Atlanta Braves',    imagen: '/img/Atlanta12.png', ruta: '/atlanta', desc: 'Los bravos campeones del sureste' }
     ]
   };
 
@@ -50,9 +88,13 @@ function Categorias() {
           <div className="collapse navbar-collapse" id="navbarGorras">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   NBA
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/chicago">Chicago Bulls</a></li>
                   <li><a className="dropdown-item" href="/boston">Boston Celtics</a></li>
@@ -61,9 +103,13 @@ function Categorias() {
               </li>
 
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   NFL
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/falcon">Atlanta Falcons</a></li>
                   <li><a className="dropdown-item" href="/arizona">Arizona Cardinals</a></li>
@@ -72,9 +118,13 @@ function Categorias() {
               </li>
 
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   MLB
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/red">Boston Red Sox</a></li>
                   <li><a className="dropdown-item" href="/white">Chicago White Sox</a></li>
@@ -91,7 +141,7 @@ function Categorias() {
             </ul>
 
             <div className="d-flex me-3">
-              <input className="form-control" type="search" placeholder="Buscar gorras..." />
+              <input className="form-control" type="search" placeholder="Buscar gorras..." aria-label="Buscar gorras" />
             </div>
 
             <a href="/login" className="btn text-white me-2"><i className="bi bi-person"></i></a>
@@ -108,8 +158,8 @@ function Categorias() {
         </div>
       </nav>
 
-      {/* HERO BANNER CON TÍTULO */}
-      <div className="bg-dark text-white text-center py-5" style={{borderBottom: '3px solid #dc2626'}}>
+      {/* HERO BANNER */}
+      <div className="bg-dark text-white text-center py-5" style={{ borderBottom: '3px solid #dc2626' }}>
         <div className="container">
           <h1 className="display-3 fw-bold mb-3">CATEGORÍAS</h1>
           <p className="lead fs-4">Encuentra tu estilo | Elige tu equipo | Representa tu pasión</p>
@@ -125,111 +175,58 @@ function Categorias() {
       <section id="nba" className="container my-5">
         <div className="row align-items-center mb-4">
           <div className="col">
-            <h2 className="fw-bold text-white" style={{borderLeft: '5px solid #dc2626', paddingLeft: '15px'}}>
+            <h2 className="fw-bold text-white" style={{ borderLeft: '5px solid #dc2626', paddingLeft: '15px' }}>
               🏀 NBA
             </h2>
             <p className="text-white-50">National Basketball Association</p>
           </div>
         </div>
-
         <div className="row justify-content-center">
           {todosLosEquipos.nba.map((equipo, idx) => (
             <div key={idx} className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm border-0" style={{transition: 'transform 0.3s'}}
-                   onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                   onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                <div className="card-body text-center p-4">
-                  <img
-                    src={equipo.imagen}
-                    alt={equipo.nombre}
-                    className="img-fluid mb-3"
-                    style={{ height: '120px', objectFit: 'contain' }}
-                  />
-                  <h4 className="fw-bold mb-2">{equipo.nombre}</h4>
-                  <p className="text-muted small mb-3">{equipo.desc}</p>
-                  <a href={equipo.ruta} className="btn btn-danger w-100">
-                    Ver Colección <i className="bi bi-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
+              <TeamCard equipo={equipo} btnClass="btn-danger" />
             </div>
           ))}
         </div>
       </section>
 
-      {/* SEPARADOR */}
       <div className="bg-light py-2"></div>
 
       {/* SECCIÓN NFL */}
       <section id="nfl" className="container my-5">
         <div className="row align-items-center mb-4">
           <div className="col">
-            <h2 className="fw-bold text-white" style={{borderLeft: '5px solid #2563eb', paddingLeft: '15px'}}>
+            <h2 className="fw-bold text-white" style={{ borderLeft: '5px solid #2563eb', paddingLeft: '15px' }}>
               🏈 NFL
             </h2>
             <p className="text-white-50">National Football League</p>
           </div>
         </div>
-
         <div className="row justify-content-center">
           {todosLosEquipos.nfl.map((equipo, idx) => (
             <div key={idx} className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm border-0" style={{transition: 'transform 0.3s'}}
-                   onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                   onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                <div className="card-body text-center p-4">
-                  <img
-                    src={equipo.imagen}
-                    alt={equipo.nombre}
-                    className="img-fluid mb-3"
-                    style={{ height: '120px', objectFit: 'contain' }}
-                  />
-                  <h4 className="fw-bold mb-2">{equipo.nombre}</h4>
-                  <p className="text-muted small mb-3">{equipo.desc}</p>
-                  <a href={equipo.ruta} className="btn btn-primary w-100">
-                    Ver Colección <i className="bi bi-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
+              <TeamCard equipo={equipo} btnClass="btn-primary" />
             </div>
           ))}
         </div>
       </section>
 
-      {/* SEPARADOR */}
       <div className="bg-light py-2"></div>
 
       {/* SECCIÓN MLB */}
       <section id="mlb" className="container my-5">
         <div className="row align-items-center mb-4">
           <div className="col">
-            <h2 className="fw-bold text-white" style={{borderLeft: '5px solid #059669', paddingLeft: '15px'}}>
+            <h2 className="fw-bold text-white" style={{ borderLeft: '5px solid #059669', paddingLeft: '15px' }}>
               ⚾ MLB
             </h2>
             <p className="text-white-50">Major League Baseball</p>
           </div>
         </div>
-
         <div className="row justify-content-center">
           {todosLosEquipos.mlb.map((equipo, idx) => (
             <div key={idx} className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm border-0" style={{transition: 'transform 0.3s'}}
-                   onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                   onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                <div className="card-body text-center p-4">
-                  <img
-                    src={equipo.imagen}
-                    alt={equipo.nombre}
-                    className="img-fluid mb-3"
-                    style={{ height: '120px', objectFit: 'contain' }}
-                  />
-                  <h4 className="fw-bold mb-2">{equipo.nombre}</h4>
-                  <p className="text-muted small mb-3">{equipo.desc}</p>
-                  <a href={equipo.ruta} className="btn btn-success w-100">
-                    Ver Colección <i className="bi bi-arrow-right"></i>
-                  </a>
-                </div>
-              </div>
+              <TeamCard equipo={equipo} btnClass="btn-success" />
             </div>
           ))}
         </div>
@@ -254,9 +251,27 @@ function Categorias() {
               <h5 className="fw-bold">UrbanCops</h5>
               <p>Gorras urbanas exclusivas con estilo auténtico. Representa tu equipo, tu barrio y tu esencia.</p>
               <div>
-                <a href="#" className="text-white me-3"><i className="bi bi-facebook"></i></a>
-                <a href="#" className="text-white me-3"><i className="bi bi-instagram"></i></a>
-                <a href="#" className="text-white"><i className="bi bi-whatsapp"></i></a>
+                <button
+                  className="btn text-white me-3 p-0 border-0 bg-transparent"
+                  aria-label="Facebook"
+                  onClick={() => window.open('https://facebook.com', '_blank')}
+                >
+                  <i className="bi bi-facebook"></i>
+                </button>
+                <button
+                  className="btn text-white me-3 p-0 border-0 bg-transparent"
+                  aria-label="Instagram"
+                  onClick={() => window.open('https://instagram.com', '_blank')}
+                >
+                  <i className="bi bi-instagram"></i>
+                </button>
+                <button
+                  className="btn text-white p-0 border-0 bg-transparent"
+                  aria-label="WhatsApp"
+                  onClick={() => window.open('https://wa.me/573100000000', '_blank')}
+                >
+                  <i className="bi bi-whatsapp"></i>
+                </button>
               </div>
             </div>
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { 
-  listDetallesPedidos, 
-  createDetallePedido, 
-  updateDetallePedido, 
+import {
+  listDetallesPedidos,
+  createDetallePedido,
+  updateDetallePedido,
   deleteDetallePedido,
   getDetallesByPedido
 } from "../services/detallePedidoService";
@@ -48,7 +48,7 @@ const DetallePedido = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       if (editingId) {
         await updateDetallePedido(editingId, formData);
@@ -58,12 +58,12 @@ const DetallePedido = () => {
         await createDetallePedido(formData);
         alert("Detalle creado correctamente");
       }
-      
-      setFormData({ 
-        id_pedido: "", 
-        id_personalizacion: "", 
-        cantidad: "", 
-        precio_unitario: "" 
+
+      setFormData({
+        id_pedido: "",
+        id_personalizacion: "",
+        cantidad: "",
+        precio_unitario: ""
       });
       setShowForm(false);
       await fetchDetalles();
@@ -105,11 +105,11 @@ const DetallePedido = () => {
   };
 
   const handleCancel = () => {
-    setFormData({ 
-      id_pedido: "", 
-      id_personalizacion: "", 
-      cantidad: "", 
-      precio_unitario: "" 
+    setFormData({
+      id_pedido: "",
+      id_personalizacion: "",
+      cantidad: "",
+      precio_unitario: ""
     });
     setEditingId(null);
     setShowForm(false);
@@ -140,8 +140,8 @@ const DetallePedido = () => {
 
   // Calcular totales
   const totalDetalles = detalles.length;
-  const totalUnidades = detalles.reduce((sum, item) => sum + parseInt(item.cantidad || 0), 0);
-  const totalVentas = detalles.reduce((sum, item) => sum + parseFloat(item.subtotal || 0), 0);
+  const totalUnidades = detalles.reduce((sum, item) => sum + Number.parseInt(item.cantidad || 0), 0);
+  const totalVentas = detalles.reduce((sum, item) => sum + Number.parseFloat(item.subtotal || 0), 0);
   const promedioTicket = totalDetalles > 0 ? totalVentas / totalDetalles : 0;
 
   return (
@@ -235,13 +235,13 @@ const DetallePedido = () => {
           <div className="col-12">
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
               <div>
+              
                 <h2 className="text-white mb-1 fw-bold">
-                  <i className="bi bi-receipt me-2"></i>
-                  Detalles de Pedidos
+                  <i className="bi bi-receipt me-2"></i>Detalles de Pedidos
                 </h2>
                 <p className="text-muted-dark mb-0">Gestiona los productos de cada pedido</p>
               </div>
-              <button 
+              <button
                 className="btn btn-gradient-primary px-4"
                 onClick={() => setShowForm(!showForm)}
               >
@@ -258,7 +258,7 @@ const DetallePedido = () => {
             <div className="bg-dark-card rounded-3 p-3">
               <div className="row g-3 align-items-end">
                 <div className="col-12 col-md-7 col-lg-8">
-                  <label className="form-label text-white fw-bold small mb-2">
+                  <label htmlFor="filtrar-pedido" className="form-label text-white fw-bold small mb-2">
                     <i className="bi bi-funnel me-1"></i>Filtrar por Pedido
                   </label>
                   <input
@@ -270,7 +270,7 @@ const DetallePedido = () => {
                   />
                 </div>
                 <div className="col-6 col-md-3 col-lg-2">
-                  <button 
+                  <button
                     className="btn btn-gradient-primary w-100"
                     onClick={handleFilterByPedido}
                   >
@@ -278,7 +278,7 @@ const DetallePedido = () => {
                   </button>
                 </div>
                 <div className="col-6 col-md-2 col-lg-2">
-                  <button 
+                  <button
                     className="btn btn-dark-custom w-100"
                     onClick={handleClearFilter}
                   >
@@ -302,7 +302,8 @@ const DetallePedido = () => {
                 <form onSubmit={handleSubmit}>
                   <div className="row g-3">
                     <div className="col-12 col-md-6 col-lg-3">
-                      <label className="form-label text-white fw-bold small">
+
+                      <label htmlFor="id-pedido" className="form-label text-white fw-bold small">
                         <i className="bi bi-basket me-1"></i>ID Pedido
                       </label>
                       <input
@@ -316,8 +317,9 @@ const DetallePedido = () => {
                       />
                     </div>
 
+
                     <div className="col-12 col-md-6 col-lg-3">
-                      <label className="form-label text-white fw-bold small">
+                      <label htmlFor="id-personalizacion" className="form-label text-white fw-bold small">
                         <i className="bi bi-palette me-1"></i>ID Personalización
                       </label>
                       <input
@@ -331,11 +333,13 @@ const DetallePedido = () => {
                       />
                     </div>
 
+
                     <div className="col-12 col-md-6 col-lg-3">
-                      <label className="form-label text-white fw-bold small">
+                      <label htmlFor="cantidad" className="form-label text-white fw-bold small">
                         <i className="bi bi-123 me-1"></i>Cantidad
                       </label>
                       <input
+                        id="cantidad"
                         type="number"
                         name="cantidad"
                         value={formData.cantidad}
@@ -348,7 +352,7 @@ const DetallePedido = () => {
                     </div>
 
                     <div className="col-12 col-md-6 col-lg-3">
-                      <label className="form-label text-white fw-bold small">
+                      <label htmlFor="precio-unitario" className="form-label text-white fw-bold small">
                         <i className="bi bi-currency-dollar me-1"></i>Precio Unitario
                       </label>
                       <input
@@ -366,8 +370,8 @@ const DetallePedido = () => {
 
                     <div className="col-12">
                       <div className="d-flex gap-2 flex-column flex-sm-row">
-                        <button 
-                          type="submit" 
+                        <button
+                          type="submit"
                           className="btn btn-gradient-success flex-grow-1"
                           disabled={loading}
                         >
@@ -384,14 +388,14 @@ const DetallePedido = () => {
                           )}
                         </button>
                         {editingId && (
-                          <button 
+
+                          <button
                             type="button"
                             onClick={handleCancel}
                             className="btn btn-dark-custom"
                             disabled={loading}
                           >
-                            <i className="bi bi-x-circle me-2"></i>
-                            Cancelar
+                            <i className="bi bi-x-circle me-2"></i>Cancelar
                           </button>
                         )}
                       </div>
@@ -412,7 +416,7 @@ const DetallePedido = () => {
                   <p className="mb-1 small opacity-75">Total Detalles</p>
                   <h3 className="mb-0 fw-bold">{totalDetalles}</h3>
                 </div>
-                <i className="bi bi-receipt" style={{fontSize: '2.5rem', opacity: 0.6}}></i>
+                <i className="bi bi-receipt" style={{ fontSize: '2.5rem', opacity: 0.6 }}></i>
               </div>
             </div>
           </div>
@@ -424,7 +428,7 @@ const DetallePedido = () => {
                   <p className="mb-1 small opacity-75">Unidades</p>
                   <h3 className="mb-0 fw-bold">{totalUnidades}</h3>
                 </div>
-                <i className="bi bi-boxes" style={{fontSize: '2.5rem', opacity: 0.6}}></i>
+                <i className="bi bi-boxes" style={{ fontSize: '2.5rem', opacity: 0.6 }}></i>
               </div>
             </div>
           </div>
@@ -434,9 +438,9 @@ const DetallePedido = () => {
               <div className="d-flex justify-content-between align-items-center">
                 <div className="text-white">
                   <p className="mb-1 small opacity-75">Total Ventas</p>
-                  <h3 className="mb-0 fw-bold">${(totalVentas/1000).toFixed(0)}K</h3>
+                  <h3 className="mb-0 fw-bold">${(totalVentas / 1000).toFixed(0)}K</h3>
                 </div>
-                <i className="bi bi-cash-stack" style={{fontSize: '2.5rem', opacity: 0.6}}></i>
+                <i className="bi bi-cash-stack" style={{ fontSize: '2.5rem', opacity: 0.6 }}></i>
               </div>
             </div>
           </div>
@@ -448,13 +452,12 @@ const DetallePedido = () => {
                   <p className="mb-1 small opacity-75">Promedio</p>
                   <h3 className="mb-0 fw-bold">${promedioTicket.toFixed(0)}</h3>
                 </div>
-                <i className="bi bi-graph-up-arrow" style={{fontSize: '2.5rem', opacity: 0.6}}></i>
+                <i className="bi bi-graph-up-arrow" style={{ fontSize: '2.5rem', opacity: 0.6 }}></i>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Lista de detalles */}
         {loading && !showForm ? (
           <div className="text-center py-5">
             <div className="spinner-border text-light" role="status">
@@ -464,14 +467,14 @@ const DetallePedido = () => {
           </div>
         ) : detalles.length === 0 ? (
           <div className="bg-dark-card rounded-3 p-5 text-center shadow">
-            <i className="bi bi-inbox text-muted-dark" style={{fontSize: '4rem'}}></i>
+            <i className="bi bi-inbox text-muted-dark" style={{ fontSize: '4rem' }}></i>
             <p className="text-muted-dark mt-3 mb-3">No hay detalles de pedidos registrados</p>
-            <button 
+
+            <button
               className="btn btn-gradient-primary"
               onClick={() => setShowForm(true)}
             >
-              <i className="bi bi-plus-circle me-2"></i>
-              Crear primer detalle
+              <i className="bi bi-plus-circle me-2"></i>Crear primer detalle
             </button>
           </div>
         ) : (
@@ -485,7 +488,7 @@ const DetallePedido = () => {
                         <span className="badge bg-secondary mb-2">Detalle #{item.id_detalle}</span>
                         <h6 className="text-white mb-0">Pedido #{item.id_pedido}</h6>
                       </div>
-                      <span className="badge" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+                      <span className="badge" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
                         Personalización #{item.id_personalizacion}
                       </span>
                     </div>
@@ -497,24 +500,24 @@ const DetallePedido = () => {
                       </div>
                       <div className="d-flex justify-content-between mb-2">
                         <span className="text-muted-dark small">Precio unitario:</span>
-                        <span className="text-success fw-bold">${parseFloat(item.precio_unitario).toLocaleString()}</span>
+                        <span className="text-success fw-bold">${Number.parseFloat(item.precio_unitario).toLocaleString()}</span>
                       </div>
                       <div className="d-flex justify-content-between">
                         <span className="text-muted-dark small">Subtotal:</span>
-                        <span className="text-info fw-bold">${parseFloat(item.subtotal).toLocaleString()}</span>
+                        <span className="text-info fw-bold">${Number.parseFloat(item.subtotal).toLocaleString()}</span>
                       </div>
                     </div>
 
                     <div className="d-flex gap-2">
-                      <button 
+                      <button
                         className="btn btn-sm btn-outline-warning flex-grow-1"
                         onClick={() => handleEdit(item)}
                         title="Editar"
                       >
-                        <i className="bi bi-pencil me-1"></i>
-                        Editar
+
+                        <i className="bi bi-pencil me-1"></i>{' '}Editar
                       </button>
-                      <button 
+                      <button
                         className="btn btn-sm btn-outline-danger"
                         onClick={() => handleDelete(item.id_detalle)}
                         title="Eliminar"

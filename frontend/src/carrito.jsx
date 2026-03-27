@@ -5,7 +5,7 @@ function Carrito() {
   const [total, setTotal] = useState(0);
   const [procesando, setProcesando] = useState(false);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  
+
   // 🆕 Estado para los datos de envío y pago
   const [datosEnvio, setDatosEnvio] = useState({
     direccion: "",
@@ -18,7 +18,7 @@ function Carrito() {
     console.log("=== DEBUGGING CARRITO ===");
     const carritoRaw = localStorage.getItem("carritoUrbanCops");
     console.log("1. localStorage raw:", carritoRaw);
-    
+
     if (carritoRaw) {
       try {
         const carritoParseado = JSON.parse(carritoRaw);
@@ -39,7 +39,7 @@ function Carrito() {
       0
     );
     setTotal(nuevoTotal);
-    
+
     if (carrito.length > 0) {
       localStorage.setItem("carritoUrbanCops", JSON.stringify(carrito));
     }
@@ -57,7 +57,7 @@ function Carrito() {
   const eliminarProducto = (index) => {
     const nuevoCarrito = carrito.filter((_, i) => i !== index);
     setCarrito(nuevoCarrito);
-    
+
     if (nuevoCarrito.length === 0) {
       localStorage.removeItem("carritoUrbanCops");
     }
@@ -159,8 +159,7 @@ function Carrito() {
       <nav className="navbar navbar-expand-lg shadow-sm sticky-top bg-dark">
         <div className="container">
           <a className="navbar-brand text-white" href="/">
-            <img src="/img/logo12.png" alt="UrbanCops" width="40" className="me-2" />
-            UrbanCops
+            <img src="/img/logo12.png" alt="UrbanCops" width="40" className="me-2" />UrbanCops
           </a>
           <a href="/" className="btn btn-outline-light">← Volver a la tienda</a>
         </div>
@@ -171,7 +170,7 @@ function Carrito() {
 
         {carrito.length === 0 ? (
           <div className="text-center py-5">
-            <i className="bi bi-cart-x" style={{fontSize: '5rem', color: '#ccc'}}></i>
+            <i className="bi bi-cart-x" style={{ fontSize: '5rem', color: '#ccc' }}></i>
             <p className="fs-4 mt-3">Tu carrito está vacío</p>
             <a href="/" className="btn btn-primary mt-3">Ir a comprar</a>
           </div>
@@ -242,9 +241,9 @@ function Carrito() {
                   {/* FORMULARIO */}
                   <div className="col-md-6">
                     <h5 className="mb-3">📍 Dirección de Envío</h5>
-                    
+
                     <div className="mb-3">
-                      <label className="form-label fw-bold">
+                      <label htmlFor="direccion" className="form-label fw-bold">
                         Dirección Completa *
                       </label>
                       <textarea
@@ -263,9 +262,11 @@ function Carrito() {
                       </small>
                     </div>
 
+
                     <div className="mb-3">
-                      <label className="form-label fw-bold">Ciudad *</label>
+                      <label htmlFor="ciudad" className="form-label fw-bold">Ciudad *</label>
                       <input
+                        id="ciudad"
                         type="text"
                         className="form-control"
                         placeholder="Ej: Bogotá"
@@ -279,8 +280,9 @@ function Carrito() {
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label fw-bold">Teléfono *</label>
+                      <label htmlFor="telefono" className="form-label fw-bold">Teléfono *</label>
                       <input
+                        id="telefono"
                         type="tel"
                         className="form-control"
                         placeholder="Ej: 3001234567"
@@ -292,7 +294,6 @@ function Carrito() {
                         required
                       />
                     </div>
-
                     <hr />
 
                     <h5 className="mb-3">💳 Método de Pago</h5>
@@ -317,7 +318,7 @@ function Carrito() {
                     <div className="card bg-light h-100">
                       <div className="card-body">
                         <h5>📋 Resumen del pedido</h5>
-                        
+
                         {carrito.map((item, i) => (
                           <div key={i} className="d-flex justify-content-between mb-2">
                             <small>• {item.nombre} x{item.cantidad}</small>
@@ -326,21 +327,21 @@ function Carrito() {
                             </small>
                           </div>
                         ))}
-                        
+
                         <hr />
-                        
+
                         <div className="d-flex justify-content-between mb-2">
                           <span>Subtotal:</span>
                           <span className="fw-bold">${total.toLocaleString()} COP</span>
                         </div>
-                        
+
                         <div className="d-flex justify-content-between mb-3">
                           <span>Envío:</span>
                           <span className="text-success fw-bold">GRATIS</span>
                         </div>
-                        
+
                         <hr />
-                        
+
                         <div className="d-flex justify-content-between">
                           <h5>Total a pagar:</h5>
                           <h5 className="text-success">${total.toLocaleString()} COP</h5>
@@ -359,10 +360,10 @@ function Carrito() {
                         onClick={finalizarCompra}
                         disabled={procesando}
                       >
+              
                         {procesando ? (
                           <>
-                            <span className="spinner-border spinner-border-sm me-2"></span>
-                            Procesando...
+                            <span className="spinner-border spinner-border-sm me-2"></span>Procesando...
                           </>
                         ) : (
                           <>
@@ -370,7 +371,7 @@ function Carrito() {
                           </>
                         )}
                       </button>
-                      
+
                       <button
                         className="btn btn-danger"
                         onClick={vaciarCarrito}

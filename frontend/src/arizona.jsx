@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 
 export default function Arizona() {
-  // ✅ Función para agregar productos al carrito (localStorage)
   const agregarAlCarrito = (nombre, precio, imagen) => {
     const carrito = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
     carrito.push({ nombre, precio, imagen });
@@ -9,21 +8,19 @@ export default function Arizona() {
     actualizarContadorCarrito();
   };
 
-  // ✅ Actualiza el contador del carrito
   const actualizarContadorCarrito = () => {
     const carrito = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
     const contador = document.getElementById("contador-carrito");
     if (contador) contador.textContent = carrito.length;
   };
 
-  // ✅ useEffect para que cargue el contador al montar el componente
   useEffect(() => {
     actualizarContadorCarrito();
   }, []);
 
   return (
     <>
-      {/* 🔹 Navbar */}
+    
       <nav className="navbar navbar-expand-lg shadow-sm sticky-top bg-dark">
         <div className="container">
           <a className="navbar-brand" href="/">
@@ -39,51 +36,55 @@ export default function Arizona() {
           </button>
           <div className="collapse navbar-collapse" id="navbarGorras">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              {/* NBA */}
+
+            
               <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle fw-bold"
-                  href="#"
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
                   data-bs-toggle="dropdown"
+                  aria-expanded="false"
                 >
                   NBA
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/chicago">Chicago Bulls</a></li>
                   <li><a className="dropdown-item" href="/boston">Boston Celtics</a></li>
                   <li><a className="dropdown-item" href="/lakers">Los Angeles Lakers</a></li>
                 </ul>
               </li>
-              {/* NFL */}
+
+             
               <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle fw-bold"
-                  href="#"
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
                   data-bs-toggle="dropdown"
+                  aria-expanded="false"
                 >
                   NFL
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/falcon">Atlanta Falcons</a></li>
                   <li><a className="dropdown-item" href="/arizona">Arizona Cardinals</a></li>
                   <li><a className="dropdown-item" href="/vegas">Las Vegas Raiders</a></li>
                 </ul>
               </li>
-              {/* MLB */}
+
+              
               <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle fw-bold"
-                  href="#"
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
                   data-bs-toggle="dropdown"
+                  aria-expanded="false"
                 >
                   MLB
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/red">Boston Red Sox</a></li>
                   <li><a className="dropdown-item" href="/white">Chicago White Sox</a></li>
                   <li><a className="dropdown-item" href="/braves">Atlanta Braves</a></li>
                 </ul>
               </li>
+
               <li className="nav-item">
                 <a className="nav-link fw-bold" href="/personalizacion">Personalizadas</a>
               </li>
@@ -91,6 +92,7 @@ export default function Arizona() {
                 <a className="nav-link fw-bold" href="/pqrs">PQRS</a>
               </li>
             </ul>
+
             <form className="d-flex me-3">
               <input
                 id="barra-busqueda"
@@ -99,6 +101,7 @@ export default function Arizona() {
                 placeholder="Buscar gorras..."
               />
             </form>
+
             <a href="/login" className="btn text-white">
               <i className="bi bi-person"></i>
             </a>
@@ -118,7 +121,7 @@ export default function Arizona() {
         </div>
       </nav>
 
-      {/* 🔹 Carrusel */}
+    
       <div id="carouselArizona" className="carousel slide" data-bs-ride="carousel">
         <div className="carousel-inner">
           <div className="carousel-item active">
@@ -147,7 +150,7 @@ export default function Arizona() {
         </button>
       </div>
 
-      {/* 🔹 Productos */}
+    
       <section className="container my-5 text-center">
         <h2>Arizona Cardinals</h2>
         <p>
@@ -192,23 +195,40 @@ export default function Arizona() {
         </div>
       </section>
 
-      {/* 🔹 Footer */}
+    
       <footer className="bg-black text-white pt-5 pb-3 mt-5">
         <div className="container">
           <div className="row">
-            {/* Info */}
             <div className="col-md-4 mb-4">
               <h5 className="fw-bold">UrbanCops</h5>
               <p>
                 Gorras urbanas exclusivas con estilo auténtico. Representa tu equipo, tu barrio y tu esencia.
               </p>
+            
               <div>
-                <a href="#" className="text-white me-3"><i className="bi bi-facebook"></i></a>
-                <a href="#" className="text-white me-3"><i className="bi bi-instagram"></i></a>
-                <a href="#" className="text-white"><i className="bi bi-whatsapp"></i></a>
+                <button
+                  className="btn text-white me-3 p-0 border-0 bg-transparent"
+                  aria-label="Facebook"
+                  onClick={() => window.open('https://facebook.com', '_blank')}
+                >
+                  <i className="bi bi-facebook"></i>
+                </button>
+                <button
+                  className="btn text-white me-3 p-0 border-0 bg-transparent"
+                  aria-label="Instagram"
+                  onClick={() => window.open('https://instagram.com', '_blank')}
+                >
+                  <i className="bi bi-instagram"></i>
+                </button>
+                <button
+                  className="btn text-white p-0 border-0 bg-transparent"
+                  aria-label="WhatsApp"
+                  onClick={() => window.open('https://wa.me/573100000000', '_blank')}
+                >
+                  <i className="bi bi-whatsapp"></i>
+                </button>
               </div>
             </div>
-            {/* Links */}
             <div className="col-md-4 mb-4">
               <h5 className="fw-bold">Enlaces Rápidos</h5>
               <ul className="list-unstyled">
@@ -218,7 +238,6 @@ export default function Arizona() {
                 <li><a href="/personalizadas" className="text-white text-decoration-none">Personalizadas</a></li>
               </ul>
             </div>
-            {/* Contacto */}
             <div className="col-md-4 mb-4">
               <h5 className="fw-bold">Contacto</h5>
               <p><i className="bi bi-envelope"></i> contacto@urbancops.com</p>

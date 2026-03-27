@@ -4,20 +4,17 @@ export default function Vegas() {
   const [carrito, setCarrito] = useState([]);
   const [busqueda, setBusqueda] = useState("");
 
-  // Cargar carrito al iniciar
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
     setCarrito(saved);
   }, []);
 
-  // Guardar carrito en localStorage
   const agregarAlCarrito = (nombre, precio, imagen) => {
     const nuevo = [...carrito, { nombre, precio, imagen }];
     setCarrito(nuevo);
     localStorage.setItem("carritoUrbanCops", JSON.stringify(nuevo));
   };
 
-  // Simula búsqueda
   const buscarGorra = (e) => {
     e.preventDefault();
     const rutas = {
@@ -34,15 +31,15 @@ export default function Vegas() {
   };
 
   const productos = [
-    { nombre: "Vegas Raid Clásica Blanca", precio: 95000, imagen: "/img/vegas/blanca-removebg-preview.png", desc: "Blanca con visera plana y escudo frontal bordado." },
-    { nombre: "Vegas Raid Black", precio: 92000, imagen: "/img/vegas/negra-removebg-preview.png", desc: "Negra con detalles en rojo y logotipo frontal en alto relieve." },
-    { nombre: "Vegas Raid Premium Blanca", precio: 98000, imagen: "/img/vegas/blancaconnegra-removebg-preview.png", desc: "Blanca con detalles en negro y logo bordado en alto relieve." },
-    { nombre: "Vegas Raid Negra y Blanca", precio: 95000, imagen: "/img/vegas/bonita-removebg-preview (1).png", desc: "Negra con panel blanco y bandera lateral bordada." },
-    { nombre: "Vegas Raid Tricolor", precio: 92000, imagen: "/img/vegas/comogris-removebg-preview.png", desc: "Negra con visera blanca y detalles en rojo." },
-    { nombre: "Vegas Raid Azul Hielo", precio: 98000, imagen: "/img/vegas/letras-removebg-preview.png", desc: "Tonos azul grisáceo con diseño moderno y escudo clásico." },
-    { nombre: "Falcons Roja Clásica", precio: 95000, imagen: "/img/vegas/blancalogo-removebg-preview.png", desc: "Roja con visera plana y bordado frontal blanco." },
-    { nombre: "Falcons Blanca con Rojo", precio: 92000, imagen: "/img/vegas/3x-removebg-preview.png", desc: "Panel frontal blanco, visera gris y detalles rojos." },
-    { nombre: "Falcons Gris Hormada", precio: 98000, imagen: "/img/vegas/amarillo-removebg-preview.png", desc: "Gris texturizada con logo bordado y estructura firme." },
+    { nombre: "Vegas Raid Clásica Blanca",    precio: 95000, imagen: "/img/vegas/blanca-removebg-preview.png",           desc: "Blanca con visera plana y escudo frontal bordado." },
+    { nombre: "Vegas Raid Black",             precio: 92000, imagen: "/img/vegas/negra-removebg-preview.png",            desc: "Negra con detalles en rojo y logotipo frontal en alto relieve." },
+    { nombre: "Vegas Raid Premium Blanca",    precio: 98000, imagen: "/img/vegas/blancaconnegra-removebg-preview.png",   desc: "Blanca con detalles en negro y logo bordado en alto relieve." },
+    { nombre: "Vegas Raid Negra y Blanca",    precio: 95000, imagen: "/img/vegas/bonita-removebg-preview (1).png",       desc: "Negra con panel blanco y bandera lateral bordada." },
+    { nombre: "Vegas Raid Tricolor",          precio: 92000, imagen: "/img/vegas/comogris-removebg-preview.png",         desc: "Negra con visera blanca y detalles en rojo." },
+    { nombre: "Vegas Raid Azul Hielo",        precio: 98000, imagen: "/img/vegas/letras-removebg-preview.png",           desc: "Tonos azul grisáceo con diseño moderno y escudo clásico." },
+    { nombre: "Falcons Roja Clásica",         precio: 95000, imagen: "/img/vegas/blancalogo-removebg-preview.png",       desc: "Roja con visera plana y bordado frontal blanco." },
+    { nombre: "Falcons Blanca con Rojo",      precio: 92000, imagen: "/img/vegas/3x-removebg-preview.png",               desc: "Panel frontal blanco, visera gris y detalles rojos." },
+    { nombre: "Falcons Gris Hormada",         precio: 98000, imagen: "/img/vegas/amarillo-removebg-preview.png",         desc: "Gris texturizada con logo bordado y estructura firme." },
   ];
 
   return (
@@ -63,39 +60,55 @@ export default function Vegas() {
           </button>
           <div className="collapse navbar-collapse" id="navbarGorras">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              {/* NBA */}
+
+              {/* NBA — ✅ FIX: <button> en lugar de <a href="#"> */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   NBA
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/chicago">Chicago Bulls</a></li>
                   <li><a className="dropdown-item" href="/boston">Boston Celtics</a></li>
                   <li><a className="dropdown-item" href="/lakers">Los Angeles Lakers</a></li>
                 </ul>
               </li>
-              {/* NFL */}
+
+              {/* NFL — ✅ FIX: <button> en lugar de <a href="#"> */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   NFL
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/falcon">Atlanta Falcons</a></li>
                   <li><a className="dropdown-item" href="/arizona">Arizona Cardinals</a></li>
                   <li><a className="dropdown-item" href="/vegas">Las Vegas Raiders</a></li>
                 </ul>
               </li>
-              {/* MLB */}
+
+              {/* MLB — ✅ FIX: <button> en lugar de <a href="#"> */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   MLB
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/red">Boston Red Sox</a></li>
                   <li><a className="dropdown-item" href="/white">Chicago White Sox</a></li>
                   <li><a className="dropdown-item" href="/braves">Atlanta Braves</a></li>
                 </ul>
               </li>
+
               <li className="nav-item"><a className="nav-link fw-bold" href="/personalizacion">Personalizadas</a></li>
               <li className="nav-item"><a className="nav-link fw-bold" href="/pqrs">PQRS</a></li>
             </ul>
@@ -176,10 +189,29 @@ export default function Vegas() {
             <div className="col-md-4 mb-4">
               <h5 className="fw-bold">UrbanCops</h5>
               <p>Gorras urbanas exclusivas con estilo auténtico. Representa tu equipo, tu barrio y tu esencia.</p>
+             
               <div>
-                <a href="#" className="text-white me-3"><i className="bi bi-facebook"></i></a>
-                <a href="#" className="text-white me-3"><i className="bi bi-instagram"></i></a>
-                <a href="#" className="text-white"><i className="bi bi-whatsapp"></i></a>
+                <button
+                  className="btn text-white me-3 p-0 border-0 bg-transparent"
+                  aria-label="Facebook"
+                  onClick={() => window.open('https://facebook.com', '_blank')}
+                >
+                  <i className="bi bi-facebook"></i>
+                </button>
+                <button
+                  className="btn text-white me-3 p-0 border-0 bg-transparent"
+                  aria-label="Instagram"
+                  onClick={() => window.open('https://instagram.com', '_blank')}
+                >
+                  <i className="bi bi-instagram"></i>
+                </button>
+                <button
+                  className="btn text-white p-0 border-0 bg-transparent"
+                  aria-label="WhatsApp"
+                  onClick={() => window.open('https://wa.me/573100000000', '_blank')}
+                >
+                  <i className="bi bi-whatsapp"></i>
+                </button>
               </div>
             </div>
             <div className="col-md-4 mb-4">

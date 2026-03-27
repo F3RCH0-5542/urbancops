@@ -32,10 +32,16 @@ const ChicagoBulls = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarGorras">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">
+
+              {/* NBA — ✅ FIX: <button> en lugar de <a href="#"> */}
+              <li className="nav-item dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   NBA
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/chicago">Chicago Bulls</a></li>
                   <li><a className="dropdown-item" href="/boston">Boston Celtics</a></li>
@@ -43,11 +49,15 @@ const ChicagoBulls = () => {
                 </ul>
               </li>
 
-              {/* NFL */}
+              {/* NFL — ✅ FIX: <button> en lugar de <a href="#"> */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   NFL
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/falcon">Atlanta Falcons</a></li>
                   <li><a className="dropdown-item" href="/arizona">Arizona Cardinals</a></li>
@@ -55,20 +65,26 @@ const ChicagoBulls = () => {
                 </ul>
               </li>
 
-              {/* MLB */}
+              {/* MLB — ✅ FIX: <button> en lugar de <a href="#"> */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   MLB
-                </a>
+                </button>
                 <ul className="dropdown-menu">
-                 <li><a className="dropdown-item" href="/red">Boston Red Sox</a></li>
+                  <li><a className="dropdown-item" href="/red">Boston Red Sox</a></li>
                   <li><a className="dropdown-item" href="/white">Chicago White Sox</a></li>
                   <li><a className="dropdown-item" href="/atlanta">Atlanta Braves</a></li>
                 </ul>
               </li>
+
               <li className="nav-item"><a className="nav-link fw-bold" href="/personalizacion">Personalizadas</a></li>
               <li className="nav-item"><a className="nav-link fw-bold" href="/pqrs">PQRS</a></li>
             </ul>
+
             <form className="d-flex me-3">
               <input id="barra-busqueda" className="form-control" type="search" placeholder="Buscar gorras..." aria-label="Buscar" />
             </form>
@@ -116,16 +132,16 @@ const ChicagoBulls = () => {
         </p>
 
         <div className="row justify-content-center mt-4">
-          {[ 
-            { nombre: "Chicago Bulls", precio: 95000, imagen: "/img/Bulls/1.png", desc: "Gorra New Era 59FIFTY de la colección NBA Classic." },
-            { nombre: "Chicago Bulls Black", precio: 92000, imagen: "/img/Bulls/2-removebg-preview.png", desc: "Gorra con logotipo bordado y diseño premium." },
-            { nombre: "Chicago Bulls logo", precio: 98000, imagen: "/img/Bulls/3.png", desc: "Modelo clásico con detalles bordados oficiales." },
-            { nombre: "Chicago Bulls Red", precio: 95000, imagen: "/img/Bulls/4-removebg-preview.png", desc: "Gorra New Era multi color." },
-            { nombre: "Chicago Bulls Blue Ice", precio: 92000, imagen: "/img/Bulls/5-removebg-preview.png", desc: "Gorra con logotipo bordado y diseño premium." },
-            { nombre: "Chicago Bulls Hormada", precio: 98000, imagen: "/img/Bulls/6.png", desc: "Modelo clásico con detalles bordados oficiales." },
-            { nombre: "Chicago Bulls Beige", precio: 95000, imagen: "/img/Bulls/7-removebg-preview.png", desc: "Gorra New Era de la colección NBA Classic." },
-            { nombre: "Chicago Blue", precio: 92000, imagen: "/img/Bulls/8-removebg-preview.png", desc: "Gorra con logotipo bordado y diseño premium." },
-            { nombre: "Chicago Bulls Beige Hormada", precio: 98000, imagen: "/img/Bulls/9-removebg-preview.png", desc: "Modelo clásico con detalles bordados oficiales." },
+          {[
+            { nombre: "Chicago Bulls",              precio: 95000, imagen: "/img/Bulls/1.png",                    desc: "Gorra New Era 59FIFTY de la colección NBA Classic." },
+            { nombre: "Chicago Bulls Black",        precio: 92000, imagen: "/img/Bulls/2-removebg-preview.png",   desc: "Gorra con logotipo bordado y diseño premium." },
+            { nombre: "Chicago Bulls logo",         precio: 98000, imagen: "/img/Bulls/3.png",                    desc: "Modelo clásico con detalles bordados oficiales." },
+            { nombre: "Chicago Bulls Red",          precio: 95000, imagen: "/img/Bulls/4-removebg-preview.png",   desc: "Gorra New Era multi color." },
+            { nombre: "Chicago Bulls Blue Ice",     precio: 92000, imagen: "/img/Bulls/5-removebg-preview.png",   desc: "Gorra con logotipo bordado y diseño premium." },
+            { nombre: "Chicago Bulls Hormada",      precio: 98000, imagen: "/img/Bulls/6.png",                    desc: "Modelo clásico con detalles bordados oficiales." },
+            { nombre: "Chicago Bulls Beige",        precio: 95000, imagen: "/img/Bulls/7-removebg-preview.png",   desc: "Gorra New Era de la colección NBA Classic." },
+            { nombre: "Chicago Blue",               precio: 92000, imagen: "/img/Bulls/8-removebg-preview.png",   desc: "Gorra con logotipo bordado y diseño premium." },
+            { nombre: "Chicago Bulls Beige Hormada",precio: 98000, imagen: "/img/Bulls/9-removebg-preview.png",   desc: "Modelo clásico con detalles bordados oficiales." },
           ].map((producto, index) => (
             <div key={index} className="col-md-4 mb-4">
               <div className="p-3 rounded text-dark-bg">
@@ -157,10 +173,29 @@ const ChicagoBulls = () => {
             <div className="col-md-4 mb-4">
               <h5 className="fw-bold">UrbanCops</h5>
               <p>Gorras urbanas exclusivas con estilo auténtico. Representa tu equipo, tu barrio y tu esencia.</p>
+              {/* ✅ FIX: <button> en lugar de <a href="#"> */}
               <div>
-                <a href="#" className="text-white me-3"><i className="bi bi-facebook"></i></a>
-                <a href="#" className="text-white me-3"><i className="bi bi-instagram"></i></a>
-                <a href="#" className="text-white"><i className="bi bi-whatsapp"></i></a>
+                <button
+                  className="btn text-white me-3 p-0 border-0 bg-transparent"
+                  aria-label="Facebook"
+                  onClick={() => window.open('https://facebook.com', '_blank')}
+                >
+                  <i className="bi bi-facebook"></i>
+                </button>
+                <button
+                  className="btn text-white me-3 p-0 border-0 bg-transparent"
+                  aria-label="Instagram"
+                  onClick={() => window.open('https://instagram.com', '_blank')}
+                >
+                  <i className="bi bi-instagram"></i>
+                </button>
+                <button
+                  className="btn text-white p-0 border-0 bg-transparent"
+                  aria-label="WhatsApp"
+                  onClick={() => window.open('https://wa.me/573100000000', '_blank')}
+                >
+                  <i className="bi bi-whatsapp"></i>
+                </button>
               </div>
             </div>
 

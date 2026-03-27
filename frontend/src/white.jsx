@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 
 export default function White() {
-  // Función para agregar al carrito
   const agregarAlCarrito = (nombre, precio, imagen) => {
     const carrito = JSON.parse(localStorage.getItem("carritoUrbanCops")) || [];
     carrito.push({ nombre, precio, imagen });
@@ -20,60 +19,15 @@ export default function White() {
   }, []);
 
   const productos = [
-    {
-      nombre: "Chicago White Sox – Shadow of the South",
-      precio: 95000,
-      imagen: "../img/Sox/1-removebg-preview.png",
-      desc: "Gorra New Era 59FIFTY de la colección NBA Classic.",
-    },
-    {
-      nombre: "Chicago White Sox – Eternal Pride",
-      precio: 92000,
-      imagen: "../img/Sox/2-removebg-preview.png",
-      desc: "Gorra con logotipo bordado y diseño premium.",
-    },
-    {
-      nombre: "Chicago White Sox – Diamond Spirit",
-      precio: 98000,
-      imagen: "../img/Sox/3-removebg-preview.png",
-      desc: "Modelo clásico con detalles bordados oficiales.",
-    },
-    {
-      nombre: "Chicago White Sox – Chicago Classic",
-      precio: 95000,
-      imagen: "../img/Sox/4-removebg-preview.png",
-      desc: "Gorra New Era multi color.",
-    },
-    {
-      nombre: "Chicago White Sox – Black and White Style",
-      precio: 92000,
-      imagen: "../img/Sox/5-removebg-preview.png",
-      desc: "Gorra con logotipo bordado y diseño premium.",
-    },
-    {
-      nombre: "Chicago White Sox – South Side Power",
-      precio: 98000,
-      imagen: "../img/Sox/6-removebg-preview.png",
-      desc: "Modelo clásico con detalles bordados oficiales.",
-    },
-    {
-      nombre: "Chicago White Sox – Legendary Tradition",
-      precio: 95000,
-      imagen: "../img/Sox/7-removebg-preview.png",
-      desc: "Gorra New Era de la colección NBA Classic.",
-    },
-    {
-      nombre: "Chicago White Sox – Baseball Passion",
-      precio: 92000,
-      imagen: "../img/Sox/8-removebg-preview.png",
-      desc: "Gorra con logotipo bordado y diseño premium.",
-    },
-    {
-      nombre: "Chicago White Sox – Urban Force",
-      precio: 98000,
-      imagen: "../img/Sox/9-removebg-preview.png",
-      desc: "Modelo clásico con detalles bordados oficiales.",
-    },
+    { nombre: "Chicago White Sox – Shadow of the South",    precio: 95000, imagen: "../img/Sox/1-removebg-preview.png", desc: "Gorra New Era 59FIFTY de la colección NBA Classic." },
+    { nombre: "Chicago White Sox – Eternal Pride",          precio: 92000, imagen: "../img/Sox/2-removebg-preview.png", desc: "Gorra con logotipo bordado y diseño premium." },
+    { nombre: "Chicago White Sox – Diamond Spirit",         precio: 98000, imagen: "../img/Sox/3-removebg-preview.png", desc: "Modelo clásico con detalles bordados oficiales." },
+    { nombre: "Chicago White Sox – Chicago Classic",        precio: 95000, imagen: "../img/Sox/4-removebg-preview.png", desc: "Gorra New Era multi color." },
+    { nombre: "Chicago White Sox – Black and White Style",  precio: 92000, imagen: "../img/Sox/5-removebg-preview.png", desc: "Gorra con logotipo bordado y diseño premium." },
+    { nombre: "Chicago White Sox – South Side Power",       precio: 98000, imagen: "../img/Sox/6-removebg-preview.png", desc: "Modelo clásico con detalles bordados oficiales." },
+    { nombre: "Chicago White Sox – Legendary Tradition",    precio: 95000, imagen: "../img/Sox/7-removebg-preview.png", desc: "Gorra New Era de la colección NBA Classic." },
+    { nombre: "Chicago White Sox – Baseball Passion",       precio: 92000, imagen: "../img/Sox/8-removebg-preview.png", desc: "Gorra con logotipo bordado y diseño premium." },
+    { nombre: "Chicago White Sox – Urban Force",            precio: 98000, imagen: "../img/Sox/9-removebg-preview.png", desc: "Modelo clásico con detalles bordados oficiales." },
   ];
 
   return (
@@ -94,36 +48,55 @@ export default function White() {
           </button>
           <div className="collapse navbar-collapse" id="navbarGorras">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+
+              {/* NBA — ✅ FIX: <button> en lugar de <a href="#"> */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   NBA
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/chicago">Chicago Bulls</a></li>
                   <li><a className="dropdown-item" href="/boston">Boston Celtics</a></li>
                   <li><a className="dropdown-item" href="/lakers">Los Angeles Lakers</a></li>
                 </ul>
               </li>
+
+              {/* NFL — ✅ FIX: <button> en lugar de <a href="#"> */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   NFL
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/falcon">Atlanta Falcons</a></li>
                   <li><a className="dropdown-item" href="/arizona">Arizona Cardinals</a></li>
                   <li><a className="dropdown-item" href="/vegas">Las Vegas Raiders</a></li>
                 </ul>
               </li>
+
+              {/* MLB — ✅ FIX: <button> en lugar de <a href="#"> */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold"href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   MLB
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/red">Boston Red Sox</a></li>
                   <li><a className="dropdown-item" href="/white">Chicago White Sox</a></li>
                   <li><a className="dropdown-item" href="/atlanta">Atlanta Braves</a></li>
                 </ul>
               </li>
+
               <li className="nav-item">
                 <a className="nav-link fw-bold" href="/personalizacion">Personalizadas</a>
               </li>
@@ -165,11 +138,7 @@ export default function White() {
       <div id="carouselExampleControls" className="carousel slide">
         <div className="carousel-inner">
           <div className="carousel-item active">
-            <img
-              src="../img/Sox/Wall.jpg"
-              className="d-block w-100"
-              alt="White Sox"
-            />
+            <img src="../img/Sox/Wall.jpg" className="d-block w-100" alt="White Sox" />
           </div>
         </div>
       </div>
@@ -214,19 +183,30 @@ export default function White() {
           <div className="row">
             <div className="col-md-4 mb-4">
               <h5 className="fw-bold">UrbanCops</h5>
-              <p>
-                Gorras urbanas exclusivas con estilo auténtico. Representa tu equipo, tu barrio y tu esencia.
-              </p>
+              <p>Gorras urbanas exclusivas con estilo auténtico. Representa tu equipo, tu barrio y tu esencia.</p>
+              {/* ✅ FIX: <button> en lugar de <a href="#"> */}
               <div>
-                <a href="#" className="text-white me-3">
+                <button
+                  className="btn text-white me-3 p-0 border-0 bg-transparent"
+                  aria-label="Facebook"
+                  onClick={() => window.open('https://facebook.com', '_blank')}
+                >
                   <i className="bi bi-facebook"></i>
-                </a>
-                <a href="#" className="text-white me-3">
+                </button>
+                <button
+                  className="btn text-white me-3 p-0 border-0 bg-transparent"
+                  aria-label="Instagram"
+                  onClick={() => window.open('https://instagram.com', '_blank')}
+                >
                   <i className="bi bi-instagram"></i>
-                </a>
-                <a href="#" className="text-white">
+                </button>
+                <button
+                  className="btn text-white p-0 border-0 bg-transparent"
+                  aria-label="WhatsApp"
+                  onClick={() => window.open('https://wa.me/573100000000', '_blank')}
+                >
                   <i className="bi bi-whatsapp"></i>
-                </a>
+                </button>
               </div>
             </div>
 

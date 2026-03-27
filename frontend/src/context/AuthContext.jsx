@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import PropTypes from "prop-types";
 
 export const AuthContext = createContext();
 
@@ -24,3 +25,8 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
+// ✅ Fix: children declarado en propTypes
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
