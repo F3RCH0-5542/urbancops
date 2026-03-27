@@ -1,7 +1,6 @@
 // src/micuenta.jsx
 import { useState, useEffect } from 'react';
 
-// ── URL base del backend ────────────────────────────────────────────────────
 const API = 'http://localhost:3001';
 const getToken = () => localStorage.getItem('token');
 
@@ -26,14 +25,14 @@ export default function MiCuenta() {
   const [pqrsOk, setPqrsOk]                 = useState('');
   const [pqrsErr, setPqrsErr]               = useState('');
 
-  // ── Cargar usuario y datos ──────────────────────────────────────────────────
   useEffect(() => {
     try {
       const raw = localStorage.getItem('usuarioLogueado');
       if (!raw) { window.location.href = '/login'; return; }
       const u = JSON.parse(raw);
       setUsuario(u);
-      fetchPedidos(u.id || u.id_usuario);
+      // ✅ Fix: fetchPedidos no recibe argumento (no lo usaba)
+      fetchPedidos();
       fetchPersonaliz(u.id || u.id_usuario);
       fetchPqrs(u.id || u.id_usuario);
     } catch {
@@ -41,24 +40,14 @@ export default function MiCuenta() {
     }
   }, []);
 
-  // ── Pedidos: usa /mis-pedidos (lee userId del token) ───────────────────────
+  // ✅ Fix: sin parámetro id (no se usaba)
   const fetchPedidos = async () => {
     try {
       const res = await fetch(`${API}/api/pedidos/mis-pedidos`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
-
-      console.log('📦 Status pedidos:', res.status);
-
-      if (!res.ok) {
-        const err = await res.json();
-        console.error('❌ Error pedidos:', err);
-        setPedidos([]);
-        return;
-      }
-
+      if (!res.ok) { setPedidos([]); return; }
       const data = await res.json();
-      console.log('✅ Pedidos recibidos:', data);
       setPedidos(Array.isArray(data) ? data : []);
     } catch (e) {
       console.error('❌ Fetch pedidos falló:', e);
@@ -68,18 +57,13 @@ export default function MiCuenta() {
     }
   };
 
-  // ── Personalizaciones: usa id del usuario ──────────────────────────────────
   const fetchPersonaliz = async (id) => {
     try {
       const res = await fetch(`${API}/api/personalizaciones/usuario/${id}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
-
-      console.log('🎨 Status personaliz:', res.status);
-
       if (!res.ok) { setPersonaliz([]); return; }
       const data = await res.json();
-      console.log('✅ Personalizaciones:', data);
       setPersonaliz(Array.isArray(data) ? data : []);
     } catch (e) {
       console.error('❌ Fetch personaliz falló:', e);
@@ -89,18 +73,13 @@ export default function MiCuenta() {
     }
   };
 
-  // ── PQRS: usa id del usuario ───────────────────────────────────────────────
   const fetchPqrs = async (id) => {
     try {
       const res = await fetch(`${API}/api/pqrs/usuario/${id}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
-
-      console.log('💬 Status pqrs:', res.status);
-
       if (!res.ok) { setMisPqrs([]); return; }
       const data = await res.json();
-      console.log('✅ PQRS:', data);
       setMisPqrs(Array.isArray(data) ? data : []);
     } catch (e) {
       console.error('❌ Fetch pqrs falló:', e);
@@ -110,7 +89,6 @@ export default function MiCuenta() {
     }
   };
 
-  // ── Enviar PQRS ─────────────────────────────────────────────────────────────
   const enviarPqrs = async () => {
     setPqrsErr(''); setPqrsOk('');
     if (!pqrsForm.asunto.trim() || !pqrsForm.mensaje.trim()) {
@@ -146,21 +124,20 @@ export default function MiCuenta() {
     }
   };
 
-  // ── Helpers ─────────────────────────────────────────────────────────────────
   const fmt = (v) => Number(v) === 0 ? '$0' : '$' + Number(v).toLocaleString('es-CO');
 
   const badge = (estado = 'pendiente') => {
     const m = {
-      pendiente:   ['rgba(212,160,23,0.15)', '#d4a017', 'rgba(212,160,23,0.4)'],
-      PENDIENTE:   ['rgba(212,160,23,0.15)', '#d4a017', 'rgba(212,160,23,0.4)'],
-      Pendiente:   ['rgba(212,160,23,0.15)', '#d4a017', 'rgba(212,160,23,0.4)'],
-      en_proceso:  ['rgba(99,102,241,0.15)', '#818cf8', 'rgba(99,102,241,0.4)'],
-      enviado:     ['rgba(59,130,246,0.15)', '#60a5fa', 'rgba(59,130,246,0.4)'],
-      completado:  ['rgba(0,212,180,0.12)',  '#00d4b4', 'rgba(0,212,180,0.35)'],
-      COMPLETADO:  ['rgba(0,212,180,0.12)',  '#00d4b4', 'rgba(0,212,180,0.35)'],
-      Respondido:  ['rgba(0,212,180,0.12)',  '#00d4b4', 'rgba(0,212,180,0.35)'],
-      cancelado:   ['rgba(220,53,69,0.12)',  '#dc3545', 'rgba(220,53,69,0.35)'],
-      CANCELADO:   ['rgba(220,53,69,0.12)',  '#dc3545', 'rgba(220,53,69,0.35)'],
+      pendiente:  ['rgba(212,160,23,0.15)', '#d4a017', 'rgba(212,160,23,0.4)'],
+      PENDIENTE:  ['rgba(212,160,23,0.15)', '#d4a017', 'rgba(212,160,23,0.4)'],
+      Pendiente:  ['rgba(212,160,23,0.15)', '#d4a017', 'rgba(212,160,23,0.4)'],
+      en_proceso: ['rgba(99,102,241,0.15)', '#818cf8', 'rgba(99,102,241,0.4)'],
+      enviado:    ['rgba(59,130,246,0.15)', '#60a5fa', 'rgba(59,130,246,0.4)'],
+      completado: ['rgba(0,212,180,0.12)',  '#00d4b4', 'rgba(0,212,180,0.35)'],
+      COMPLETADO: ['rgba(0,212,180,0.12)',  '#00d4b4', 'rgba(0,212,180,0.35)'],
+      Respondido: ['rgba(0,212,180,0.12)',  '#00d4b4', 'rgba(0,212,180,0.35)'],
+      cancelado:  ['rgba(220,53,69,0.12)',  '#dc3545', 'rgba(220,53,69,0.35)'],
+      CANCELADO:  ['rgba(220,53,69,0.12)',  '#dc3545', 'rgba(220,53,69,0.35)'],
     };
     const [bg, color, border] = m[estado] || m.pendiente;
     return {
@@ -171,10 +148,7 @@ export default function MiCuenta() {
   };
 
   const initials = (n = '') => n.split(' ').slice(0,2).map(w => w[0]).join('').toUpperCase();
-  const hOn  = e => e.currentTarget.style.borderColor = '#d4a017';
-  const hOff = e => e.currentTarget.style.borderColor = '#2a2a2a';
 
-  // ── Estilos ─────────────────────────────────────────────────────────────────
   const S = {
     wrap:   { background: '#0a0a0a', minHeight: '100vh', fontFamily: "'Barlow','Segoe UI',sans-serif", color: '#e0e0e0' },
     topbar: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', background: '#111', borderBottom: '1px solid #2a2a2a' },
@@ -186,7 +160,7 @@ export default function MiCuenta() {
     tabs:   { display: 'flex', background: '#111', borderBottom: '1px solid #2a2a2a' },
     tab: a => ({ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, padding: '13px 6px', background: 'none', border: 'none', borderBottom: a ? '2px solid #d4a017' : '2px solid transparent', color: a ? '#d4a017' : '#666', cursor: 'pointer', fontSize: 11, fontWeight: 500, transition: 'color .2s' }),
     cnt:    { padding: 16 },
-    card:   { display: 'flex', alignItems: 'center', background: '#161616', border: '1px solid #2a2a2a', borderRadius: 8, padding: '14px 16px', marginBottom: 10, cursor: 'pointer' },
+    card:   { display: 'flex', alignItems: 'center', background: '#161616', border: '1px solid #2a2a2a', borderRadius: 8, padding: '14px 16px', marginBottom: 10 },
     ico:    { width: 40, height: 40, background: '#1e1800', border: '1.5px solid #d4a017', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#d4a017', fontSize: 17 },
     icoB:   { width: 40, height: 40, background: '#001e1a', border: '1.5px solid #00d4b4', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#00d4b4', fontSize: 17 },
     cInfo:  { flex: 1, marginLeft: 14 },
@@ -213,7 +187,6 @@ export default function MiCuenta() {
     sVal:   { fontSize: 13, fontWeight: 600 },
   };
 
-  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <div style={S.wrap}>
 
@@ -258,8 +231,12 @@ export default function MiCuenta() {
                 </div>
               )
               : pedidos.map(p => (
-                <div key={p.id_pedido} style={S.card} onMouseEnter={hOn} onMouseLeave={hOff}
-                  onClick={() => window.location.href = `/pedido/${p.id_pedido}`}>
+                // ✅ Fix: button en lugar de div con onClick
+                <button
+                  key={p.id_pedido}
+                  style={{ ...S.card, width: '100%', textAlign: 'left', cursor: 'pointer' }}
+                  onClick={() => window.location.href = `/pedido/${p.id_pedido}`}
+                >
                   <div style={S.ico}><i className="bi bi-bag-check"></i></div>
                   <div style={S.cInfo}>
                     <div style={S.cHead}>
@@ -271,7 +248,7 @@ export default function MiCuenta() {
                     </div>
                   </div>
                   <div style={S.amt(p.total)}>{fmt(p.total)}</div>
-                </div>
+                </button>
               ))
         )}
 
@@ -290,7 +267,8 @@ export default function MiCuenta() {
                 </div>
               )
               : personalizaciones.map(p => (
-                <div key={p.id_personalizacion || p.id} style={S.card} onMouseEnter={hOn} onMouseLeave={hOff}>
+                // ✅ Fix: div no interactivo — sin onClick, solo display
+                <div key={p.id_personalizacion || p.id} style={S.card}>
                   <div style={S.ico}><i className="bi bi-palette2"></i></div>
                   <div style={S.cInfo}>
                     <div style={S.cHead}>
@@ -314,8 +292,6 @@ export default function MiCuenta() {
         {/* ══ PQRS ══ */}
         {tab === 'pqrs' && (
           <div style={{ maxWidth: 560 }}>
-
-            {/* Formulario */}
             <div style={{ background: '#161616', border: '1px solid #2a2a2a', borderRadius: 8, padding: 20, marginBottom: 24 }}>
               <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 16, fontWeight: 700, color: '#fff', marginBottom: 16 }}>
                 <i className="bi bi-plus-circle me-2" style={{ color: '#d4a017' }}></i>Nueva solicitud
@@ -324,23 +300,38 @@ export default function MiCuenta() {
               {pqrsOk  && <div style={S.aOk}>{pqrsOk}</div>}
               {pqrsErr && <div style={S.aErr}>{pqrsErr}</div>}
 
-              <label style={S.lbl}>Tipo</label>
-              <select style={S.inp} value={pqrsForm.tipo}
-                onChange={e => setPqrsForm(f => ({ ...f, tipo: e.target.value }))}>
+              {/* ✅ Fix: label con htmlFor + id en cada control */}
+              <label htmlFor="pqrs-tipo" style={S.lbl}>Tipo</label>
+              <select
+                id="pqrs-tipo"
+                style={S.inp}
+                value={pqrsForm.tipo}
+                onChange={e => setPqrsForm(f => ({ ...f, tipo: e.target.value }))}
+              >
                 <option value="Peticion">Petición</option>
                 <option value="Queja">Queja</option>
                 <option value="Reclamo">Reclamo</option>
                 <option value="Sugerencia">Sugerencia</option>
               </select>
 
-              <label style={S.lbl}>Asunto</label>
-              <input style={S.inp} type="text" placeholder="Describe brevemente tu solicitud"
-                value={pqrsForm.asunto} onChange={e => setPqrsForm(f => ({ ...f, asunto: e.target.value }))} />
+              <label htmlFor="pqrs-asunto" style={S.lbl}>Asunto</label>
+              <input
+                id="pqrs-asunto"
+                style={S.inp}
+                type="text"
+                placeholder="Describe brevemente tu solicitud"
+                value={pqrsForm.asunto}
+                onChange={e => setPqrsForm(f => ({ ...f, asunto: e.target.value }))}
+              />
 
-              <label style={S.lbl}>Mensaje</label>
-              <textarea style={{ ...S.inp, resize: 'vertical', minHeight: 90 }}
+              <label htmlFor="pqrs-mensaje" style={S.lbl}>Mensaje</label>
+              <textarea
+                id="pqrs-mensaje"
+                style={{ ...S.inp, resize: 'vertical', minHeight: 90 }}
                 placeholder="Explica con detalle..."
-                value={pqrsForm.mensaje} onChange={e => setPqrsForm(f => ({ ...f, mensaje: e.target.value }))} />
+                value={pqrsForm.mensaje}
+                onChange={e => setPqrsForm(f => ({ ...f, mensaje: e.target.value }))}
+              />
 
               <button style={{ ...S.btnG, opacity: enviando ? 0.6 : 1 }} onClick={enviarPqrs} disabled={enviando}>
                 {enviando
@@ -349,7 +340,6 @@ export default function MiCuenta() {
               </button>
             </div>
 
-            {/* Historial */}
             <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontSize: 16, fontWeight: 700, color: '#fff', marginBottom: 12 }}>
               <i className="bi bi-clock-history me-2" style={{ color: '#d4a017' }}></i>Mis solicitudes
             </p>
@@ -359,8 +349,11 @@ export default function MiCuenta() {
               : misPqrs.length === 0
                 ? <p style={{ color: '#555', fontSize: 13 }}>Sin solicitudes aún.</p>
                 : misPqrs.map(q => (
-                  <div key={q.id_pqrs || q.id} style={{ ...S.card, flexDirection: 'column', alignItems: 'flex-start', cursor: 'default' }}
-                    onMouseEnter={hOn} onMouseLeave={hOff}>
+                  // ✅ Fix: div no interactivo — sin onClick
+                  <div
+                    key={q.id_pqrs || q.id}
+                    style={{ ...S.card, flexDirection: 'column', alignItems: 'flex-start' }}
+                  >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', marginBottom: 6 }}>
                       <div style={S.icoB}><i className="bi bi-chat-dots"></i></div>
                       <div style={{ flex: 1 }}>

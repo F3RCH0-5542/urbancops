@@ -34,7 +34,7 @@ function Registrar() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     setFormData({
       ...formData,
       [name]: value
@@ -52,17 +52,15 @@ function Registrar() {
     setCargando(true);
 
     // Validaciones
-    if (!formData.nombre.trim() || !formData.apellido.trim() || 
-        !formData.documento.trim() || !formData.usuario.trim() || 
-        !formData.correo.trim() || !formData.clave.trim()) {
+    if (!formData.nombre.trim() || !formData.apellido.trim() ||
+      !formData.documento.trim() || !formData.usuario.trim() ||
+      !formData.correo.trim() || !formData.clave.trim()) {
       setTipo("danger");
       setMensaje("❌ Todos los campos son obligatorios");
       setCargando(false);
       return;
     }
-
-    // Validar formato de correo
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(formData.correo)) {
       setTipo("danger");
       setMensaje("❌ Por favor ingresa un correo válido");
@@ -107,7 +105,7 @@ function Registrar() {
       if (respuesta.ok) {
         setTipo("success");
         setMensaje("✅ ¡Cuenta creada exitosamente! Redirigiendo...");
-        
+
         // Limpiar formulario
         setFormData({
           nombre: "",
@@ -164,7 +162,7 @@ function Registrar() {
         <span className="borderline"></span>
 
         <form onSubmit={handleSubmit} noValidate>
-          <h2 style={{ 
+          <h2 style={{
             marginBottom: "10px",
             fontSize: "2em",
             background: "linear-gradient(45deg, #fff, #00ff88)",
@@ -173,11 +171,11 @@ function Registrar() {
           }}>
             Crear Cuenta
           </h2>
-          <p style={{ 
-            color: "#aaa", 
-            marginBottom: "25px", 
+          <p style={{
+            color: "#aaa",
+            marginBottom: "25px",
             fontSize: "0.9em",
-            textAlign: "center" 
+            textAlign: "center"
           }}>
             Únete a nuestra comunidad
           </p>
@@ -189,8 +187,8 @@ function Registrar() {
                 marginBottom: "20px",
                 fontFamily: "Arial",
                 padding: "12px 15px",
-                background: tipo === "danger" 
-                  ? "rgba(255, 68, 68, 0.1)" 
+                background: tipo === "danger"
+                  ? "rgba(255, 68, 68, 0.1)"
                   : "rgba(0, 255, 136, 0.1)",
                 border: `1px solid ${tipo === "danger" ? "#ff4444" : "#00ff88"}`,
                 color: tipo === "danger" ? "#ff4444" : "#00ff88",
@@ -376,7 +374,7 @@ function Registrar() {
             </div>
           )}
 
-          <div className="links" style={{ 
+          <div className="links" style={{
             marginTop: "20px",
             display: "flex",
             flexDirection: "column",
@@ -394,9 +392,9 @@ function Registrar() {
             </a>
           </div>
 
-          <input 
-            type="submit" 
-            value={cargando ? "Creando cuenta..." : "Registrarse"} 
+          <input
+            type="submit"
+            value={cargando ? "Creando cuenta..." : "Registrarse"}
             disabled={cargando}
             style={{
               cursor: cargando ? "not-allowed" : "pointer",
@@ -408,33 +406,33 @@ function Registrar() {
         </form>
       </div>
 
-      <style jsx>{`
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
+      <style>{`
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-        .inputbox input:focus + span {
-          color: #00ff88;
-        }
+  .inputbox input:focus + span {
+    color: #00ff88;
+  }
 
-        .links a:hover {
-          color: #00ff88;
-          text-decoration: underline;
-        }
+  .links a:hover {
+    color: #00ff88;
+    text-decoration: underline;
+  }
 
-        input[type="submit"]:hover:not(:disabled) {
-          background: #00ff88;
-          color: #000;
-          box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-        }
-      `}</style>
+  input[type="submit"]:hover:not(:disabled) {
+    background: #00ff88;
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+  }
+`}</style>
     </div>
   );
 }

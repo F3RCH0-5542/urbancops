@@ -2,12 +2,12 @@ export default function registroform() {
   return (
     <form className="mb-4">
       <div className="mb-3">
-        <label className="form-label">Usuario</label>
-        <input type="text" className="form-control" />
+        <label htmlFor="usuario" className="form-label">Usuario</label>
+        <input id="usuario" type="text" className="form-control" />
       </div>
       <div className="mb-3">
-        <label className="form-label">Contraseña</label>
-        <input type="password" className="form-control" />
+        <label htmlFor="contrasena" className="form-label">Contraseña</label>
+        <input id="contrasena" type="password" className="form-control" />
       </div>
       <button type="submit" className="btn btn-primary">Registrar</button>
     </form>

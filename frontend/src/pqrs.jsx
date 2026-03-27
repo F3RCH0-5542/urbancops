@@ -22,7 +22,6 @@ export default function PQRS() {
     setEstado(true);
 
     try {
-      // Enviar al backend
       const dataToSend = {
         nombre: nombre.trim(),
         correo: correo.trim(),
@@ -34,9 +33,8 @@ export default function PQRS() {
 
       await createPqrs(dataToSend);
 
-      // Generar número de seguimiento
       const seguimiento = Math.floor(100000 + Math.random() * 900000);
-      
+
       const mensajeTipo = {
         Peticion: "Gracias por tu petición. Será evaluada por nuestro equipo.",
         Queja: "Lamentamos el inconveniente. Lo atenderemos con prioridad.",
@@ -52,7 +50,6 @@ export default function PQRS() {
 
       setMostrarRespuesta(true);
       e.target.reset();
-
       setTimeout(() => setMostrarRespuesta(false), 8000);
 
     } catch (err) {
@@ -81,45 +78,66 @@ export default function PQRS() {
           </button>
           <div className="collapse navbar-collapse" id="navbarGorras">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+
+              {/* NBA — ✅ FIX: <button> en lugar de <a href="#"> */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold text-white" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   NBA
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/chicago">Chicago Bulls</a></li>
                   <li><a className="dropdown-item" href="/boston">Boston Celtics</a></li>
                   <li><a className="dropdown-item" href="/lakers">Los Angeles Lakers</a></li>
                 </ul>
               </li>
+
+              {/* NFL — ✅ FIX: <button> en lugar de <a href="#"> */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold text-white" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   NFL
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/falcon">Atlanta Falcons</a></li>
                   <li><a className="dropdown-item" href="/arizona">Arizona Cardinals</a></li>
                   <li><a className="dropdown-item" href="/vegas">Las Vegas Raiders</a></li>
                 </ul>
               </li>
+
+              {/* MLB — ✅ FIX: <button> en lugar de <a href="#"> */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle fw-bold text-white" href="#" data-bs-toggle="dropdown">
+                <button
+                  className="nav-link dropdown-toggle fw-bold btn btn-link p-0 text-white text-decoration-none"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   MLB
-                </a>
+                </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="/red">Boston Red Sox</a></li>
                   <li><a className="dropdown-item" href="/white">Chicago White Sox</a></li>
                   <li><a className="dropdown-item" href="/atlanta">Atlanta Braves</a></li>
                 </ul>
               </li>
+
               <li className="nav-item"><a className="nav-link fw-bold text-white" href="/personalizacion">Personalizadas</a></li>
               <li className="nav-item"><a className="nav-link fw-bold text-white" href="/pqrs">PQRS</a></li>
             </ul>
+
             <form className="d-flex me-3">
               <input
                 id="barra-busqueda"
                 className="form-control"
                 type="search"
                 placeholder="Buscar gorras..."
+                aria-label="Buscar"
               />
             </form>
             <a href="/login" className="btn text-white">
@@ -145,8 +163,7 @@ export default function PQRS() {
       <div className="container text-center my-5">
         <h1 className="text-white fw-bold">Tu Voz en UrbanCops</h1>
         <p className="lead text-white">
-          ¿Tuviste algún inconveniente, sugerencia o reclamo? Envíanos tu mensaje,
-          te escuchamos.
+          ¿Tuviste algún inconveniente, sugerencia o reclamo? Envíanos tu mensaje, te escuchamos.
         </p>
       </div>
 
@@ -213,15 +230,10 @@ export default function PQRS() {
                       required
                     ></textarea>
                   </div>
-                  <button
-                    type="submit"
-                    className="btn btn-dark btn-lg w-100"
-                    disabled={estado}
-                  >
+                  <button type="submit" className="btn btn-dark btn-lg w-100" disabled={estado}>
                     {estado ? (
                       <>
-                        <span className="spinner-border spinner-border-sm me-2"></span>
-                        Enviando...
+                        <span className="spinner-border spinner-border-sm me-2"></span>Enviando...
                       </>
                     ) : (
                       <>
@@ -240,8 +252,7 @@ export default function PQRS() {
 
                 {estado && !error && (
                   <div className="alert alert-info mt-3" role="alert">
-                    <i className="bi bi-clock-history me-2"></i>
-                    Procesando tu solicitud...
+                    <i className="bi bi-clock-history me-2"></i>Procesando tu solicitud...
                   </div>
                 )}
 

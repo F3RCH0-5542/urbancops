@@ -1,644 +1,561 @@
-import React, { useEffect, useState } from "react";
-import { listVentas, createVenta, updateVenta, deleteVenta } from "../services/ventasService";
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import "./ventas.css";
 
-const Ventas = () => {
-  const [ventas, setVentas] = useState([]);
-  const [newVenta, setNewVenta] = useState({ id_usuario: "", fecha: "" });
-  const [editingVenta, setEditingVenta] = useState(null);
-  const [deletingVenta, setDeletingVenta] = useState(null);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
+// ─── Config ──────────────────────────────────────────────────────────────────
 
-  const token = localStorage.getItem("token");
+const API = "http://localhost:3001/api";
+const TOAST_DURATION = 3000;
+const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
-  useEffect(() => {
-    fetchVentas();
-  }, []);
-
-  useEffect(() => {
-    if (error || success) {
-      const timer = setTimeout(() => {
-        setError("");
-        setSuccess("");
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [error, success]);
-
-  const fetchVentas = async () => {
-    try {
-      setLoading(true);
-      const data = await listVentas(token);
-      setVentas(data || []);
-    } catch (err) {
-      console.error("Error al obtener ventas:", err);
-      setError("No se pudieron cargar las ventas");
-      setVentas([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreateVenta = async () => {
-    if (!newVenta.id_usuario || !newVenta.fecha) {
-      setError("Todos los campos son obligatorios");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError("");
-      const data = await createVenta({
-        id_usuario: parseInt(newVenta.id_usuario),
-        fecha: newVenta.fecha
-      }, token);
-      
-      await fetchVentas();
-      setNewVenta({ id_usuario: "", fecha: "" });
-      setSuccess("✅ Venta registrada exitosamente");
-    } catch (err) {
-      console.error("Error al crear venta:", err);
-      setError("No se pudo registrar la venta");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleUpdateVenta = async () => {
-    if (!editingVenta.id_usuario || !editingVenta.fecha) {
-      setError("Todos los campos son obligatorios");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError("");
-      await updateVenta(editingVenta.id_venta, {
-        id_usuario: parseInt(editingVenta.id_usuario),
-        fecha: editingVenta.fecha
-      }, token);
-      
-      await fetchVentas();
-      setEditingVenta(null);
-      setSuccess("✅ Venta actualizada exitosamente");
-    } catch (err) {
-      console.error("Error al actualizar venta:", err);
-      setError("No se pudo actualizar la venta");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDeleteVenta = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      await deleteVenta(deletingVenta.id_venta, token);
-      
-      await fetchVentas();
-      setDeletingVenta(null);
-      setSuccess("✅ Venta eliminada exitosamente");
-    } catch (err) {
-      console.error("Error al eliminar venta:", err);
-      setError("No se pudo eliminar la venta");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "Sin fecha";
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-    } catch {
-      return dateString;
-    }
-  };
-
-  return (
-    <div style={{
-      minHeight: '100vh',
-      background: '#000',
-      color: '#fff',
-      fontFamily: 'Arial, sans-serif'
-    }}>
-      {/* Navbar */}
-      <nav style={{
-        background: '#000',
-        borderBottom: '1px solid #222',
-        padding: '20px'
-      }}>
-        <div style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <a href="/home" style={{
-            fontSize: '28px',
-            fontWeight: 'bold',
-            color: '#fff',
-            textDecoration: 'none'
-          }}>
-            URBAN CAPS
-          </a>
-          <a href="/home" style={{
-            background: '#111',
-            color: '#fff',
-            padding: '12px 24px',
-            borderRadius: '6px',
-            textDecoration: 'none',
-            border: '1px solid #222'
-          }}>
-            ← Volver
-          </a>
-        </div>
-      </nav>
-
-      {/* Content */}
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '40px 20px'
-      }}>
-        {/* Header */}
-        <div style={{ marginBottom: '40px' }}>
-          <h1 style={{
-            fontSize: '42px',
-            fontWeight: 'bold',
-            marginBottom: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '16px'
-          }}>
-            <span>📊</span>
-            GESTIÓN DE VENTAS
-          </h1>
-          <p style={{ color: '#999', fontSize: '16px' }}>
-            Registra, edita y elimina ventas del sistema
-          </p>
-        </div>
-
-        {/* Card */}
-        <div style={{
-          background: '#111',
-          border: '1px solid #222',
-          borderRadius: '12px',
-          padding: '32px'
-        }}>
-          {/* Alertas */}
-          {error && (
-            <div style={{
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              padding: '16px',
-              borderRadius: '6px',
-              marginBottom: '24px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
-            }}>
-              <span style={{ fontSize: '20px' }}>⚠️</span>
-              <span style={{ color: '#ef4444', fontWeight: '600' }}>{error}</span>
-            </div>
-          )}
-
-          {success && (
-            <div style={{
-              background: 'rgba(16, 185, 129, 0.1)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              padding: '16px',
-              borderRadius: '6px',
-              marginBottom: '24px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
-            }}>
-              <span style={{ fontSize: '20px' }}>✅</span>
-              <span style={{ color: '#10b981', fontWeight: '600' }}>{success}</span>
-            </div>
-          )}
-
-          {/* Formulario Crear */}
-          <div style={{ marginBottom: '32px' }}>
-            <h3 style={{ fontSize: '18px', marginBottom: '16px', fontWeight: '600' }}>
-              ➕ Registrar Nueva Venta
-            </h3>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '12px',
-              marginBottom: '12px'
-            }}>
-              <input
-                type="number"
-                placeholder="ID Usuario"
-                value={newVenta.id_usuario}
-                onChange={(e) => setNewVenta({...newVenta, id_usuario: e.target.value})}
-                disabled={loading}
-                style={{
-                  background: '#000',
-                  border: '1px solid #222',
-                  borderRadius: '6px',
-                  padding: '14px 16px',
-                  color: '#fff',
-                  fontSize: '14px',
-                  outline: 'none'
-                }}
-              />
-              <input
-                type="date"
-                value={newVenta.fecha}
-                onChange={(e) => setNewVenta({...newVenta, fecha: e.target.value})}
-                disabled={loading}
-                style={{
-                  background: '#000',
-                  border: '1px solid #222',
-                  borderRadius: '6px',
-                  padding: '14px 16px',
-                  color: '#fff',
-                  fontSize: '14px',
-                  outline: 'none'
-                }}
-              />
-              <button
-                onClick={handleCreateVenta}
-                disabled={loading}
-                style={{
-                  background: loading ? '#374151' : '#3b82f6',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '14px 28px',
-                  borderRadius: '6px',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  fontWeight: '600',
-                  fontSize: '14px'
-                }}
-              >
-                {loading ? "⏳ GUARDANDO..." : "💾 REGISTRAR"}
-              </button>
-            </div>
-          </div>
-
-          {/* Tabla */}
-          {loading && ventas.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
-              <p>Cargando ventas...</p>
-            </div>
-          ) : ventas.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '60px 20px', color: '#999' }}>
-              <div style={{ fontSize: '64px', marginBottom: '16px' }}>🛒</div>
-              <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '8px', color: '#fff' }}>
-                No hay ventas registradas
-              </h3>
-              <p>Registra la primera venta para comenzar</p>
-            </div>
-          ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{
-                width: '100%',
-                borderCollapse: 'collapse',
-                background: '#000',
-                borderRadius: '8px',
-                overflow: 'hidden'
-              }}>
-                <thead>
-                  <tr>
-                    <th style={{
-                      background: '#1a1a1a',
-                      padding: '16px',
-                      textAlign: 'left',
-                      fontWeight: '700',
-                      fontSize: '14px',
-                      borderBottom: '2px solid #222'
-                    }}>
-                      ID VENTA
-                    </th>
-                    <th style={{
-                      background: '#1a1a1a',
-                      padding: '16px',
-                      textAlign: 'left',
-                      fontWeight: '700',
-                      fontSize: '14px',
-                      borderBottom: '2px solid #222'
-                    }}>
-                      ID USUARIO
-                    </th>
-                    <th style={{
-                      background: '#1a1a1a',
-                      padding: '16px',
-                      textAlign: 'left',
-                      fontWeight: '700',
-                      fontSize: '14px',
-                      borderBottom: '2px solid #222'
-                    }}>
-                      FECHA
-                    </th>
-                    <th style={{
-                      background: '#1a1a1a',
-                      padding: '16px',
-                      textAlign: 'left',
-                      fontWeight: '700',
-                      fontSize: '14px',
-                      borderBottom: '2px solid #222'
-                    }}>
-                      ACCIONES
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ventas.map((venta) => (
-                    <tr key={venta.id_venta}>
-                      <td style={{
-                        padding: '16px',
-                        borderBottom: '1px solid #222'
-                      }}>
-                        #{venta.id_venta}
-                      </td>
-                      <td style={{
-                        padding: '16px',
-                        borderBottom: '1px solid #222'
-                      }}>
-                        👤 Usuario {venta.id_usuario}
-                      </td>
-                      <td style={{
-                        padding: '16px',
-                        borderBottom: '1px solid #222'
-                      }}>
-                        📅 {formatDate(venta.fecha)}
-                      </td>
-                      <td style={{
-                        padding: '16px',
-                        borderBottom: '1px solid #222'
-                      }}>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                          <button
-                            onClick={() => setEditingVenta({...venta})}
-                            style={{
-                              background: '#111',
-                              border: '1px solid #222',
-                              borderRadius: '6px',
-                              width: '36px',
-                              height: '36px',
-                              cursor: 'pointer',
-                              fontSize: '16px'
-                            }}
-                            title="Editar"
-                          >
-                            ✏️
-                          </button>
-                          <button
-                            onClick={() => setDeletingVenta(venta)}
-                            style={{
-                              background: '#111',
-                              border: '1px solid #222',
-                              borderRadius: '6px',
-                              width: '36px',
-                              height: '36px',
-                              cursor: 'pointer',
-                              fontSize: '16px'
-                            }}
-                            title="Eliminar"
-                          >
-                            🗑️
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Modal Editar */}
-      {editingVenta && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.8)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '20px'
-        }} onClick={() => setEditingVenta(null)}>
-          <div style={{
-            background: '#111',
-            border: '1px solid #222',
-            borderRadius: '12px',
-            padding: '32px',
-            maxWidth: '500px',
-            width: '100%'
-          }} onClick={(e) => e.stopPropagation()}>
-            <h2 style={{
-              fontSize: '24px',
-              fontWeight: 'bold',
-              marginBottom: '24px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
-            }}>
-              <span>✏️</span>
-              EDITAR VENTA
-            </h2>
-            
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{
-                display: 'block',
-                marginBottom: '8px',
-                color: '#999',
-                fontSize: '14px',
-                fontWeight: '600'
-              }}>
-                ID Usuario
-              </label>
-              <input
-                type="number"
-                value={editingVenta.id_usuario}
-                onChange={(e) => setEditingVenta({...editingVenta, id_usuario: e.target.value})}
-                disabled={loading}
-                style={{
-                  background: '#000',
-                  border: '1px solid #222',
-                  borderRadius: '6px',
-                  padding: '14px 16px',
-                  color: '#fff',
-                  fontSize: '14px',
-                  width: '100%',
-                  outline: 'none'
-                }}
-              />
-            </div>
-
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{
-                display: 'block',
-                marginBottom: '8px',
-                color: '#999',
-                fontSize: '14px',
-                fontWeight: '600'
-              }}>
-                Fecha
-              </label>
-              <input
-                type="date"
-                value={editingVenta.fecha?.split('T')[0] || editingVenta.fecha}
-                onChange={(e) => setEditingVenta({...editingVenta, fecha: e.target.value})}
-                disabled={loading}
-                style={{
-                  background: '#000',
-                  border: '1px solid #222',
-                  borderRadius: '6px',
-                  padding: '14px 16px',
-                  color: '#fff',
-                  fontSize: '14px',
-                  width: '100%',
-                  outline: 'none'
-                }}
-              />
-            </div>
-
-            <div style={{
-              display: 'flex',
-              gap: '12px',
-              marginTop: '24px',
-              justifyContent: 'flex-end'
-            }}>
-              <button
-                onClick={() => setEditingVenta(null)}
-                disabled={loading}
-                style={{
-                  background: '#374151',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '14px 28px',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  fontSize: '14px'
-                }}
-              >
-                CANCELAR
-              </button>
-              <button
-                onClick={handleUpdateVenta}
-                disabled={loading}
-                style={{
-                  background: loading ? '#374151' : '#10b981',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '14px 28px',
-                  borderRadius: '6px',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  fontWeight: '600',
-                  fontSize: '14px'
-                }}
-              >
-                {loading ? "⏳ GUARDANDO..." : "💾 GUARDAR"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal Eliminar */}
-      {deletingVenta && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.8)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '20px'
-        }} onClick={() => setDeletingVenta(null)}>
-          <div style={{
-            background: '#111',
-            border: '1px solid #222',
-            borderRadius: '12px',
-            padding: '32px',
-            maxWidth: '500px',
-            width: '100%'
-          }} onClick={(e) => e.stopPropagation()}>
-            <h2 style={{
-              fontSize: '24px',
-              fontWeight: 'bold',
-              marginBottom: '24px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
-            }}>
-              <span>⚠️</span>
-              CONFIRMAR ELIMINACIÓN
-            </h2>
-            
-            <p style={{ color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
-              ¿Estás seguro de que deseas eliminar la venta <strong style={{ color: '#fff' }}>#{deletingVenta.id_venta}</strong>?
-              <br/><br/>
-              <strong style={{ color: '#ef4444' }}>Esta acción no se puede deshacer.</strong>
-            </p>
-
-            <div style={{
-              display: 'flex',
-              gap: '12px',
-              marginTop: '24px',
-              justifyContent: 'flex-end'
-            }}>
-              <button
-                onClick={() => setDeletingVenta(null)}
-                disabled={loading}
-                style={{
-                  background: '#374151',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '14px 28px',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  fontSize: '14px'
-                }}
-              >
-                CANCELAR
-              </button>
-              <button
-                onClick={handleDeleteVenta}
-                disabled={loading}
-                style={{
-                  background: loading ? '#374151' : '#ef4444',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '14px 28px',
-                  borderRadius: '6px',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  fontWeight: '600',
-                  fontSize: '14px'
-                }}
-              >
-                {loading ? "⏳ ELIMINANDO..." : "🗑️ ELIMINAR"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+const ESTADO_PEDIDO = {
+  pendiente:  { color: "#fbbf24", bg: "rgba(251,191,36,.15)",  label: "Pendiente",  icon: "⏳" },
+  pagado:     { color: "#60a5fa", bg: "rgba(96,165,250,.15)",  label: "Pagado",     icon: "💳" },
+  enviado:    { color: "#a78bfa", bg: "rgba(167,139,250,.15)", label: "Enviado",    icon: "🚚" },
+  entregado:  { color: "#34d399", bg: "rgba(52,211,153,.15)",  label: "Entregado",  icon: "✅" },
+  cancelado:  { color: "#f87171", bg: "rgba(248,113,113,.15)", label: "Cancelado",  icon: "❌" },
 };
 
-export default Ventas;
+const getHeaders = () => ({
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${localStorage.getItem("token")}`,
+});
+
+// ─── Helpers de datos ─────────────────────────────────────────────────────────
+
+function calcularIngresosPorMes(ventas) {
+  const acc = {};
+  ventas.forEach((v) => {
+    const fecha = new Date(v.createdAt || v.fecha);
+    const key = MESES[fecha.getMonth()];
+    acc[key] = (acc[key] || 0) + Number(v.total || 0);
+  });
+  return Object.entries(acc).map(([label, value]) => ({ label, value }));
+}
+
+function calcularProductosMasVendidos(detalles) {
+  const acc = {};
+  detalles.forEach((d) => {
+    const nombre = d.Producto?.nombre || `Prod #${d.id_producto}`;
+    if (!acc[nombre]) acc[nombre] = { nombre, cantidad: 0 };
+    acc[nombre].cantidad += Number(d.cantidad || 1);
+  });
+  return Object.values(acc).sort((a, b) => b.cantidad - a.cantidad);
+}
+
+function filtrarPedidos(pedidos, filtroEstado, busqueda) {
+  return pedidos.filter((p) => {
+    const matchEstado = filtroEstado ? p.estado === filtroEstado : true;
+    const matchBusq = busqueda
+      ? (p.Usuario?.nombre || "").toLowerCase().includes(busqueda.toLowerCase()) ||
+        String(p.id_pedido).includes(busqueda)
+      : true;
+    return matchEstado && matchBusq;
+  });
+}
+
+// ─── Sub-componentes ──────────────────────────────────────────────────────────
+
+function Toast({ toast }) {
+  if (!toast) return null;
+  return (
+    <div className={`v-toast v-toast--${toast.type}`} role="status" aria-live="polite">
+      <span>{toast.type === "error" ? "❌" : "✅"}</span>
+      <span>{toast.msg}</span>
+    </div>
+  );
+}
+
+function KpiCard({ icono, titulo, valor, subtitulo, color }) {
+  return (
+    <div className="v-kpi" style={{ "--kpi-accent": color }}>
+      <div className="v-kpi__icon" aria-hidden="true">{icono}</div>
+      <div className="v-kpi__body">
+        <p className="v-kpi__label">{titulo}</p>
+        <p className="v-kpi__value">{valor}</p>
+        {subtitulo && <p className="v-kpi__sub">{subtitulo}</p>}
+      </div>
+    </div>
+  );
+}
+
+function BarChart({ data, height = 140 }) {
+  if (!data || data.length === 0) {
+    return <p className="v-chart__empty">Sin datos por mes</p>;
+  }
+  const max = Math.max(...data.map((d) => d.value), 1);
+
+  return (
+    <div className="v-chart" style={{ height }} aria-label="Ingresos por mes">
+      {data.map((d, i) => (
+        <div key={d.label} className="v-chart__col" style={{ animationDelay: `${i * 60}ms` }}>
+          <span className="v-chart__val">
+            {d.value >= 1000 ? `${(d.value / 1000).toFixed(0)}k` : d.value}
+          </span>
+          <div
+            className="v-chart__bar"
+            style={{ height: `${(d.value / max) * (height - 36)}px` }}
+            title={`${d.label}: $${d.value.toLocaleString()}`}
+          />
+          <span className="v-chart__lbl">{d.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BadgeEstado({ estado }) {
+  const cfg = ESTADO_PEDIDO[estado] || { color: "#94a3b8", bg: "rgba(148,163,184,.15)", label: estado, icon: "•" };
+  return (
+    <span
+      className="v-badge-estado"
+      style={{ color: cfg.color, background: cfg.bg, borderColor: cfg.color }}
+    >
+      {cfg.icon} {cfg.label}
+    </span>
+  );
+}
+
+function FilaPedido({ pedido, onVerDetalle, onCambiarEstado }) {
+  const fecha = new Date(pedido.createdAt || pedido.fecha);
+  const fechaStr = Number.isNaN(fecha.getTime())
+    ? "—"
+    : fecha.toLocaleDateString("es-CO", { day: "2-digit", month: "short", year: "numeric" });
+
+  return (
+    <tr className="v-tr">
+      <td><span className="v-id">#{pedido.id_pedido}</span></td>
+      <td>{pedido.Usuario?.nombre || `Cliente #${pedido.id_usuario}`}</td>
+      <td>{fechaStr}</td>
+      <td>
+        <strong className="v-total">
+          ${Number(pedido.total || 0).toLocaleString("es-CO")}
+        </strong>
+      </td>
+      <td><BadgeEstado estado={pedido.estado} /></td>
+      <td>
+        <div className="v-acciones">
+          <button
+            type="button"
+            className="v-btn-ver"
+            onClick={() => onVerDetalle(pedido)}
+            aria-label={`Ver detalles del pedido ${pedido.id_pedido}`}
+          >
+            👁 Ver
+          </button>
+          <select
+            className="v-select-estado"
+            value={pedido.estado}
+            onChange={(e) => onCambiarEstado(pedido.id_pedido, e.target.value)}
+            aria-label={`Cambiar estado del pedido ${pedido.id_pedido}`}
+          >
+            {Object.entries(ESTADO_PEDIDO).map(([key, { label }]) => (
+              <option key={key} value={key}>{label}</option>
+            ))}
+          </select>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
+function ModalDetalle({ pedido, detalles, onCerrar }) {
+  if (!pedido) return null;
+
+  const detallesPedido = detalles.filter(
+    (d) => d.id_pedido === pedido.id_pedido
+  );
+
+  return (
+    <div
+      className="v-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-detalle-title"
+      onClick={(e) => { if (e.target === e.currentTarget) onCerrar(); }}
+    >
+      <div className="v-modal">
+        <div className="v-modal__header">
+          <h2 id="modal-detalle-title" className="v-modal__title">
+            Pedido <span className="v-modal__id">#{pedido.id_pedido}</span>
+          </h2>
+          <button
+            type="button"
+            className="v-modal__close"
+            onClick={onCerrar}
+            aria-label="Cerrar detalle"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="v-modal__meta">
+          <div className="v-modal__meta-item">
+            <span>Cliente</span>
+            <strong>{pedido.Usuario?.nombre || `#${pedido.id_usuario}`}</strong>
+          </div>
+          <div className="v-modal__meta-item">
+            <span>Estado</span>
+            <BadgeEstado estado={pedido.estado} />
+          </div>
+          <div className="v-modal__meta-item">
+            <span>Total</span>
+            <strong className="v-modal__total">
+              ${Number(pedido.total || 0).toLocaleString("es-CO")}
+            </strong>
+          </div>
+        </div>
+
+        {detallesPedido.length > 0 ? (
+          <table className="v-modal__table">
+            <thead>
+              <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Precio unit.</th>
+                <th scope="col">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {detallesPedido.map((d) => (
+                <tr key={d.id_detalle}>
+                  <td>{d.Producto?.nombre || `Prod #${d.id_producto}`}</td>
+                  <td>{d.cantidad}</td>
+                  <td>${Number(d.precio_unitario || 0).toLocaleString("es-CO")}</td>
+                  <td>
+                    <strong>
+                      ${(Number(d.cantidad) * Number(d.precio_unitario || 0)).toLocaleString("es-CO")}
+                    </strong>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="v-modal__empty">Sin ítems registrados para este pedido.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ProductosTop({ productos }) {
+  if (productos.length === 0) {
+    return <p className="v-empty-msg">Sin datos de productos.</p>;
+  }
+  const max = productos[0]?.cantidad || 1;
+
+  return (
+    <ul className="v-top-list" aria-label="Productos más vendidos">
+      {productos.slice(0, 5).map((p, i) => (
+        <li key={p.nombre} className="v-top-item" style={{ animationDelay: `${i * 80}ms` }}>
+          <span className="v-top-rank">#{i + 1}</span>
+          <div className="v-top-info">
+            <span className="v-top-nombre">{p.nombre}</span>
+            <div className="v-top-bar-wrap">
+              <div
+                className="v-top-bar"
+                style={{ width: `${(p.cantidad / max) * 100}%` }}
+              />
+            </div>
+          </div>
+          <span className="v-top-qty">{p.cantidad} uds.</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// ─── Componente principal ─────────────────────────────────────────────────────
+
+export default function Ventas() {
+  const [pedidos, setPedidos]           = useState([]);
+  const [ventas, setVentas]             = useState([]);
+  const [detalles, setDetalles]         = useState([]);
+  const [loading, setLoading]           = useState(false);
+  const [tab, setTab]                   = useState("resumen");
+  const [filtroEstado, setFiltroEstado] = useState("");
+  const [busqueda, setBusqueda]         = useState("");
+  const [detallePedido, setDetallePedido] = useState(null);
+  const [toast, setToast]               = useState(null);
+
+  // ── Toast ────────────────────────────────────────────────────────────────────
+
+  const showToast = useCallback((msg, type = "success") => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), TOAST_DURATION);
+  }, []);
+
+  // ── Fetch ────────────────────────────────────────────────────────────────────
+
+  const fetchAll = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [rPedidos, rVentas, rDetalles] = await Promise.all([
+        fetch(`${API}/pedidos`,        { headers: getHeaders() }),
+        fetch(`${API}/ventas`,         { headers: getHeaders() }),
+        fetch(`${API}/detalle-pedidos`,{ headers: getHeaders() }),
+      ]);
+
+      const [dPedidos, dVentas, dDetalles] = await Promise.all([
+        rPedidos.json(),
+        rVentas.json(),
+        rDetalles.json(),
+      ]);
+
+      setPedidos( Array.isArray(dPedidos)  ? dPedidos  : (dPedidos.pedidos   || []));
+      setVentas(  Array.isArray(dVentas)   ? dVentas   : (dVentas.ventas     || []));
+      setDetalles(Array.isArray(dDetalles) ? dDetalles : (dDetalles.detalles || []));
+    } catch {
+      showToast("Error al cargar datos", "error");
+    } finally {
+      setLoading(false);
+    }
+  }, [showToast]);
+
+  useEffect(() => { fetchAll(); }, [fetchAll]);
+
+  // ── Acciones ─────────────────────────────────────────────────────────────────
+
+  const actualizarEstadoPedido = useCallback(async (id, estado) => {
+    try {
+      const r = await fetch(`${API}/pedidos/${id}`, {
+        method: "PATCH",
+        headers: getHeaders(),
+        body: JSON.stringify({ estado }),
+      });
+      if (!r.ok) {
+        const err = await r.json();
+        throw new Error(err.msg || "Error al actualizar");
+      }
+      showToast("Estado actualizado correctamente");
+      fetchAll();
+    } catch (err) {
+      showToast(err.message || "Error inesperado", "error");
+    }
+  }, [showToast, fetchAll]);
+
+  // ── Datos derivados ───────────────────────────────────────────────────────────
+
+  const totalIngresos        = ventas.reduce((s, v) => s + Number(v.total || 0), 0);
+  const ingresosPorMes       = calcularIngresosPorMes(ventas);
+  const productosMasVendidos = calcularProductosMasVendidos(detalles);
+  const pedidosFiltrados     = filtrarPedidos(pedidos, filtroEstado, busqueda);
+
+  const conteoEstados = pedidos.reduce((acc, p) => {
+    acc[p.estado] = (acc[p.estado] || 0) + 1;
+    return acc;
+  }, {});
+
+  // ── Render ────────────────────────────────────────────────────────────────────
+
+  const navigate = useNavigate();
+
+  return (
+    <div className="v-page">
+      <div className="v-main">
+        {/* HEADER */}
+        <header className="v-header">
+          <div>
+            <h1 className="v-title">💰 Ventas y Pedidos</h1>
+            <p className="v-subtitle">Panel de control de ventas</p>
+          </div>
+          <div className="v-header-actions">
+            <button
+              type="button"
+              className="v-btn-admin"
+              onClick={() => navigate("/Admin")}
+              aria-label="Ir al Panel Admin"
+            >
+              🛡️ Panel Admin
+            </button>
+            <button
+              type="button"
+              className="v-btn-refresh"
+              onClick={fetchAll}
+              disabled={loading}
+              aria-label="Actualizar datos"
+            >
+              {loading ? "⟳ Cargando…" : "⟳ Actualizar"}
+            </button>
+          </div>
+        </header>
+
+        {/* KPIs */}
+        <section className="v-kpis" aria-label="Indicadores principales">
+          <KpiCard
+            icono="💵"
+            titulo="Ingresos totales"
+            valor={`$${totalIngresos.toLocaleString("es-CO")}`}
+            subtitulo={`${ventas.length} ventas`}
+            color="#34d399"
+          />
+          <KpiCard
+            icono="📦"
+            titulo="Total pedidos"
+            valor={pedidos.length}
+            subtitulo={`${conteoEstados.pendiente || 0} pendientes`}
+            color="#60a5fa"
+          />
+          <KpiCard
+            icono="✅"
+            titulo="Entregados"
+            valor={conteoEstados.entregado || 0}
+            subtitulo="Completados"
+            color="#34d399"
+          />
+          <KpiCard
+            icono="❌"
+            titulo="Cancelados"
+            valor={conteoEstados.cancelado || 0}
+            subtitulo="Este período"
+            color="#f87171"
+          />
+        </section>
+
+        {/* TABS */}
+        <div className="v-tabs" role="tablist" aria-label="Secciones de ventas">
+          {[
+            { key: "resumen",  label: "📊 Resumen"  },
+            { key: "pedidos",  label: "📦 Pedidos"  },
+            { key: "productos",label: "🏆 Productos" },
+          ].map(({ key, label }) => (
+            <button
+              key={key}
+              type="button"
+              role="tab"
+              aria-selected={tab === key}
+              className={`v-tab${tab === key ? " v-tab--active" : ""}`}
+              onClick={() => setTab(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* TAB: RESUMEN */}
+        {tab === "resumen" && (
+          <section className="v-section" aria-label="Resumen de ingresos">
+            <div className="v-card">
+              <h2 className="v-card__title">Ingresos por mes</h2>
+              {loading
+                ? <div className="v-loading"><div className="v-spinner" /></div>
+                : <BarChart data={ingresosPorMes} height={160} />
+              }
+            </div>
+
+            <div className="v-card">
+              <h2 className="v-card__title">Estado de pedidos</h2>
+              <ul className="v-estado-list" aria-label="Conteo por estado">
+                {Object.entries(ESTADO_PEDIDO).map(([key, { icon, label, color, bg }]) => (
+                  <li key={key} className="v-estado-item" style={{ "--est-color": color, "--est-bg": bg }}>
+                    <span className="v-estado-icon" aria-hidden="true">{icon}</span>
+                    <span className="v-estado-label">{label}</span>
+                    <span className="v-estado-count">{conteoEstados[key] || 0}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
+        {/* TAB: PEDIDOS */}
+        {tab === "pedidos" && (
+          <section aria-label="Lista de pedidos">
+            <div className="v-toolbar">
+              <div className="v-search">
+                <span aria-hidden="true">🔍</span>
+                <input
+                  type="search"
+                  placeholder="Buscar por cliente o ID…"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  aria-label="Buscar pedidos"
+                />
+              </div>
+              <select
+                className="v-filter-select"
+                value={filtroEstado}
+                onChange={(e) => setFiltroEstado(e.target.value)}
+                aria-label="Filtrar por estado"
+              >
+                <option value="">Todos los estados</option>
+                {Object.entries(ESTADO_PEDIDO).map(([key, { label }]) => (
+                  <option key={key} value={key}>{label}</option>
+                ))}
+              </select>
+              <span className="v-count-badge">
+                {pedidosFiltrados.length} pedido{pedidosFiltrados.length !== 1 ? "s" : ""}
+              </span>
+            </div>
+
+            <div className="v-card v-card--table">
+              {loading ? (
+                <div className="v-loading"><div className="v-spinner" /></div>
+              ) : (
+                <div className="v-table-wrap">
+                  <table className="v-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pedidosFiltrados.length > 0
+                        ? pedidosFiltrados.map((p, i) => (
+                            <FilaPedido
+                              key={p.id_pedido}
+                              pedido={p}
+                              indice={i}
+                              onVerDetalle={setDetallePedido}
+                              onCambiarEstado={actualizarEstadoPedido}
+                            />
+                          ))
+                        : (
+                          <tr>
+                            <td colSpan={6} className="v-empty-td">
+                              {busqueda || filtroEstado
+                                ? "Sin resultados para los filtros aplicados"
+                                : "No hay pedidos registrados"}
+                            </td>
+                          </tr>
+                        )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* TAB: PRODUCTOS */}
+        {tab === "productos" && (
+          <section aria-label="Productos más vendidos">
+            <div className="v-card">
+              <h2 className="v-card__title">🏆 Top 5 productos más vendidos</h2>
+              {loading
+                ? <div className="v-loading"><div className="v-spinner" /></div>
+                : <ProductosTop productos={productosMasVendidos} />
+              }
+            </div>
+          </section>
+        )}
+      </div>
+
+      {/* MODAL DETALLE */}
+      <ModalDetalle
+        pedido={detallePedido}
+        detalles={detalles}
+        onCerrar={() => setDetallePedido(null)}
+      />
+
+      {/* TOAST */}
+      <Toast toast={toast} />
+    </div>
+  );
+}
